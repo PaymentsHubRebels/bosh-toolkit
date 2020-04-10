@@ -30,7 +30,7 @@ run:
     fi
 
     pushd blobs
-      for blob_name in $(find * -type f); do
+      for blob in $(find * -type f); do
         bosh add-blob --dir=../source-code "$blob" "$blob"
       done
     popd
