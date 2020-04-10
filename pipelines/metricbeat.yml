@@ -53,7 +53,7 @@ resources:
   type: s3
   source:
     bucket: bosh-binary-releases
-    regexp: metricbeat/metribeat-(.*)-*.tgz
+    regexp: metricbeat/metricbeat-(.*)-*.tgz
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
     endpoint: ((s3_endpoint))
@@ -140,11 +140,14 @@ jobs:
   - put: version
     params: {bump: minor}
   - task: prepare-release-notes
-    file: bosh-toolkit/tasks/create-release-note/task.yml
+    file: bosh-toolkit/tasks/create-release-notes/task.yml
+    params:
+      release_name: metricbeat
+      github_owner: ((github_owner))
   - put: metricbeat-boshrelease
     params:
-      name: metricbeat-version/version
-      tag: metricbeat-version/version
+      name: version/version
+      tag: version/version
       body: release-notes/note.md
       globs:
         - release/*.tgz
