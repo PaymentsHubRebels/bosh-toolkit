@@ -26,8 +26,8 @@ run:
   args:
     - -ec
     - |
-      stemcell_version=$(bosh -d "$deployment_name" deployment | grep ${release_name} | awk '{print $3}' | awk -F '/' '{print $2}')
-      bosh -d "$deployment_name" \
+      stemcell_version=$(bosh -d "$deployment" deployment | grep ${release_name} | awk '{print $3}' | awk -F '/' '{print $2}')
+      bosh -d "$deployment" \
            export-release "${release_name}/$(cat version/version)" "${os}/${stemcell_version}" \
            --dir=binary-release/
   
