@@ -18,10 +18,10 @@ outputs:
 - name: release-notes
 
 run:
-    path: bash
-    args:
-    - -ec
-    - |
+  path: bash
+  args:
+  - -ec
+  - |
     release_version=$(cat version/version)
     release_tarball_name="${release_name}-boshrelease-${release_version}.tgz"
     release_sha=$(sha1sum release/*.tgz | awk '{print $1}')
