@@ -1,0 +1,107 @@
+resource_types:
+- name: curl
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
+- name: bosh-deployment
+  type: docker-image
+  source:
+    repository: cloudfoundry/bosh-deployment-resource
+
+resources:
+- name: source-code
+  type: git
+  source:
+    uri: https://github.com/diefida/metricbeat-boshrelease
+    branch: master
+
+- name: bosh-toolkit
+  type: git
+  source:
+    uri: https://github.com/diefida/bosh-toolkit
+    branch: master
+    
+- name: vbox-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-warden-boshlite-ubuntu-xenial-go_agent
+
+- name: staging
+  type: bosh-deployment
+  source:
+    deployment: metricbeat-staging
+    target: ((bosh_target))
+    client: ((bosh_client))
+    client_secret: ((bosh_client_secret))
+    ca_cert: ((bosh_ca_cert))
+    
+jobs:
+- name: run-release-specs
+  plan: 
+  - get: source-code
+    trigger: true
+  - get: bosh-toolkit
+  - task: run-specs
+    file: bosh-toolkit/tasks/run-specs-task.yml
+
+- name: build-and-deploy-dev-release
+  plan:
+  - get: source-code
+    trigger: true
+    passed: [run-release-specs]
+  - get: bosh-toolkit
+  - task: download-blobs
+    file: bosh-toolkit/tasks/download-blobs/task.yml
+    params:
+      release_name: metricbeat
+  - task: create-dev-release
+    file: bosh-toolkit/tasks/create-bosh-release/task.yml
+    params:
+      release_name: metricbeat
+  - get: vbox-stemcell
+  - put: staging
+    params:
+      manifest: source-code/manifests/metricbeat.yml
+      stemcells:
+      - vbox-stemcell/*.tgz
+      releases:
+      - release-tarball/*.tgz
+      vars:
+        kibana_host: ((kibana_host))
+        elasticsearch_hosts: ((elasticsearch_hosts))
+
+- name: cleanup-environment
+  plan:
+  - put: staging
+    params:
+      delete:
+        enabled: true
+        force: true
+  - task: delete-releases-and-stemcells
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: { repository: diefida/bosh-utils }
+      outputs:
+        - name: metricbeat-deployment
+      run:
+        path: /bin/bash
+        args:
+          - -ec
+          - |
+            export BOSH_ENVIRONMENT="((bosh_target))"
+            export BOSH_CA_CERT="((bosh_ca_cert))"
+            export BOSH_CLIENT="((bosh_client))"
+            export BOSH_CLIENT_SECRET="((bosh_client_secret))"
+
+            for release in $(bosh releases | awk '{print $1}'); do
+              bosh --non-interactive delete-release $release --force
+            done
+
+            for stemcell in $(bosh stemcells | awk '{print $1"/"$2}'); do
+              bosh --non-interactive delete-stemcell $stemcell --force
+            done
+  

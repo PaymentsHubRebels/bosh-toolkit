@@ -1,0 +1,23 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+  repository: diefida/bosh-utils
+  tag: 'latest'
+
+params: {}
+
+inputs:
+- name: source-code
+
+run:
+  path: bash
+  args:
+  - -ec
+  - |
+    pushd source-code
+      bundle install
+      bundle exec rspec spec/**/*.rb
+    popd

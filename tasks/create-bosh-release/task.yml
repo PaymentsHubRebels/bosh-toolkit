@@ -1,0 +1,40 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+  repository: diefida/bosh-utils
+  tag: 'latest'
+
+params:
+  release_name:
+  final: false
+
+inputs:
+- name: source-code
+- name: bosh-toolkit
+
+outputs:
+- name: release-tarball
+
+run:
+  path: bash
+  args:
+  - -ec
+  - |
+    bosh_options=(--force)
+
+    if [[ "$final" == "true" ]]; then
+      bosh_options=("${bosh_options[@]}" --final)
+    fi
+
+    pushd blobs
+      for blob_name in $(find * -type f); do
+        bosh add-blob --dir=../source-code "$blob" "$blob"
+      done
+    popd
+
+    pushd source-code
+      bosh create-release "${bosh_options[@]}" --tarball=../release-tarball/${release_name}-boshrelease.tgz
+    popd

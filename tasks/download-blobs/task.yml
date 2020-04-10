@@ -1,0 +1,27 @@
+---
+  platform: linux
+  
+  image_resource:
+    type: docker-image
+    source:
+    repository: diefida/bosh-utils
+    tag: 'latest'
+  
+  params:
+    release_name:
+  
+  inputs:
+  - name: bosh-toolkit
+  
+  outputs:
+  - name: blobs
+  
+  run:
+    path: bash
+    args:
+    - -ec
+    - |
+      pushd blobs
+        ruby bosh-toolkit/tasks/download-blobs/download_blobs.rb bosh-toolkit/config/$release_name/blobs.yml
+      popd
+  
