@@ -1,0 +1,34 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: diefida/bosh-utils
+    tag: 'latest'
+
+params:
+  release_name:
+  deployment:
+  os: ubuntu-xenial    
+  BOSH_ENVIRONMENT:
+  BOSH_CA_CERT:
+  BOSH_CLIENT:
+  BOSH_CLIENT_SECRET:
+
+inputs:
+  - name: version
+outputs:
+  - name: binary-release
+
+run:
+  path: /bin/bash
+  args:
+    - -ec
+    - |
+      stemcell_version=$(bosh -d "$deployment_name" deployment | grep ${release_name} | awk '{print $3}' | awk -F '/' '{print $2}')
+      bosh -d "$deployment_name" \
+           export-release "${release_name}/$(cat version/version)" "${os}/${stemcell_version}" \
+           --dir=binary-release/
+  
+  

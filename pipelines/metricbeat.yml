@@ -36,30 +36,67 @@ resources:
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
     ca_cert: ((bosh_ca_cert))
-    
+
+- name: version
+  type: semver
+  source:
+    driver: s3
+    initial_version: 0.16.0
+    bucket: bosh-releases-semver
+    key: metricbeat/version
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    disable_ssl: true
+
+- name: binary-releases-repo
+  type: s3
+  source:
+    bucket: bosh-binary-releases
+    regexp: metricbeat/metribeat-(.*)-*.tgz
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+
+
+- name: cleanup-trigger
+  type: semver
+  source:
+    driver: s3
+    initial_version: 0.0.0
+    bucket: triggers
+    key: metricbeat/trigger
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    disable_ssl: true
+
+- name: metricbeat-boshrelease
+  type: github-release
+  source:
+    owner: ((github_owner))
+    repository: metricbeat-boshrelease
+    access_token: ((github_token))
+
 jobs:
-- name: run-release-specs
-  plan: 
+- name: acceptance
+  plan:
   - get: source-code
     trigger: true
   - get: bosh-toolkit
   - task: run-specs
     file: bosh-toolkit/tasks/run-specs/task.yml
-
-- name: build-and-deploy-dev-release
-  plan:
-  - get: source-code
-    trigger: true
-    passed: [run-release-specs]
-  - get: bosh-toolkit
+  - get: version
+    params: {bump: minor}
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:
       release_name: metricbeat
-  - task: create-dev-release
+  - task: create-release
     file: bosh-toolkit/tasks/create-bosh-release/task.yml
     params:
       release_name: metricbeat
+      final: true
   - get: vbox-stemcell
   - put: staging
     params:
@@ -67,13 +104,59 @@ jobs:
       stemcells:
       - vbox-stemcell/*.tgz
       releases:
-      - release-tarball/*.tgz
+      - release/*.tgz
       vars:
         kibana_host: ((kibana_host))
         elasticsearch_hosts: ((elasticsearch_hosts))
 
+- name: publish
+  plan:
+  - get: source-code
+    trigger: true
+    passed: [acceptance]
+  - get: bosh-toolkit
+  - task: download-blobs
+    file: bosh-toolkit/tasks/download-blobs/task.yml
+    params:
+      release_name: metricbeat
+    input_mapping:
+      version: metricbeat-version
+  - task: create-release
+    file: bosh-toolkit/tasks/create-bosh-release/task.yml
+    params:
+      release_name: metricbeat
+      final: true
+  - task: export-release
+    file: bosh-toolkit/tasks/export-release/task.yml
+    params:
+      release_name: metricbeat
+      deployment: metricbeat-staging
+      BOSH_ENVIRONMENT: ((bosh_target))
+      BOSH_CA_CERT: ((bosh_ca_cert))
+      BOSH_CLIENT: ((bosh_client))
+      BOSH_CLIENT_SECRET: ((bosh_client_secret))
+  - put: version
+    params: {bump: minor}
+  - task: prepare-release-notes
+    file: bosh-toolkit/tasks/create-release-note/task.yml
+  - put: metricbeat-boshrelease
+    params:
+      name: metricbeat-version/version
+      tag: metricbeat-version/version
+      body: release-notes/note.md
+      globs:
+        - release/*.tgz
+  - put: binary-releases-repo
+    params:
+      file: binary-release/*.tgz    
+  - put: cleanup-trigger
+    params: {bump: minor}
+
 - name: cleanup-environment
   plan:
+  - get: cleanup-trigger
+    trigger: true
+    passed: [publish] 
   - put: staging
     params:
       delete:

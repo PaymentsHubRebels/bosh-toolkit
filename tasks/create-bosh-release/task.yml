@@ -16,7 +16,7 @@ inputs:
 - name: blobs
 
 outputs:
-- name: release-tarball
+- name: release
 
 run:
   path: bash
@@ -26,7 +26,7 @@ run:
     bosh_options=(--force)
 
     if [[ "$final" == "true" ]]; then
-      bosh_options=("${bosh_options[@]}" --final)
+      bosh_options=("${bosh_options[@]}" --final --version=$(cat version/version))
     fi
 
     pushd blobs
@@ -36,5 +36,5 @@ run:
     popd
 
     pushd source-code
-      bosh create-release "${bosh_options[@]}" --tarball=../release-tarball/${release_name}-boshrelease.tgz
+      bosh create-release "${bosh_options[@]}" --tarball=../release/${release_name}-boshrelease-$(cat version/version).tgz
     popd
