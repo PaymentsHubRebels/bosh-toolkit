@@ -121,6 +121,8 @@ jobs:
       release_name: metricbeat
     input_mapping:
       version: metricbeat-version
+  - get: version
+    params: {bump: minor}
   - task: create-release
     file: bosh-toolkit/tasks/create-bosh-release/task.yml
     params:
