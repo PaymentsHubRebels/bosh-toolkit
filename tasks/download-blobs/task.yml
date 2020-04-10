@@ -22,6 +22,6 @@
     - -ec
     - |
       pushd blobs
-        ruby bosh-toolkit/tasks/download-blobs/download_blobs.rb bosh-toolkit/config/$release_name/blobs.yml
+        ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
       popd
   
