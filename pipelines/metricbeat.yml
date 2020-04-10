@@ -79,29 +79,23 @@ jobs:
       delete:
         enabled: true
         force: true
-  - task: delete-releases-and-stemcells
+  - get: bosh-toolkit
+  - task: delete-releases
     config:
       platform: linux
-      image_resource:
-        type: registry-image
-        source: { repository: diefida/bosh-utils }
-      outputs:
-        - name: metricbeat-deployment
-      run:
-        path: /bin/bash
-        args:
-          - -ec
-          - |
-            export BOSH_ENVIRONMENT="((bosh_target))"
-            export BOSH_CA_CERT="((bosh_ca_cert))"
-            export BOSH_CLIENT="((bosh_client))"
-            export BOSH_CLIENT_SECRET="((bosh_client_secret))"
-
-            for release in $(bosh releases | awk '{print $1}'); do
-              bosh --non-interactive delete-release $release --force
-            done
-
-            for stemcell in $(bosh stemcells | awk '{print $1"/"$2}'); do
-              bosh --non-interactive delete-stemcell $stemcell --force
-            done
-  
+      file: bosh-toolkit/tasks/delete-releases/task.yml
+      params:
+        BOSH_ENVIRONMENT: ((bosh_target))
+        BOSH_CA_CERT: ((bosh_ca_cert))
+        BOSH_CLIENT: ((bosh_client))
+        BOSH_CLIENT_SECRET: ((bosh_client_secret))
+        
+  - task: delete-stemcells
+    config:
+      platform: linux
+      file: bosh-toolkit/tasks/delete-stemcells/task.yml
+      params:
+        BOSH_ENVIRONMENT: ((bosh_target))
+        BOSH_CA_CERT: ((bosh_ca_cert))
+        BOSH_CLIENT: ((bosh_client))
+        BOSH_CLIENT_SECRET: ((bosh_client_secret))
