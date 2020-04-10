@@ -13,6 +13,9 @@
   inputs:
   - name: bosh-toolkit
   
+  caches:
+  - path: blobs
+
   outputs:
   - name: blobs
   

@@ -3,5 +3,5 @@ require 'yaml'
 blobs_config = YAML.load_file(ARGV[0])
 
 blobs_config.each do |blob_info|
-  `curl --create-dirs -o #{blob_info.fetch('bosh_blob_path')} #{blob_info.fetch('url')}`
+  `curl --create-dirs -o #{blob_info.fetch('bosh_blob_path')} #{blob_info.fetch('url')}` unless File.exist?("#{blob_info.fetch('bosh_blob_path')}")
 end
