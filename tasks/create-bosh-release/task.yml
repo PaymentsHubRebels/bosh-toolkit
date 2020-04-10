@@ -13,7 +13,7 @@ params:
 
 inputs:
 - name: source-code
-- name: bosh-toolkit
+- name: blobs
 
 outputs:
 - name: release-tarball
