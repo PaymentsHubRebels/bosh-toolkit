@@ -1,10 +1,4 @@
 resource_types:
-- name: curl
-  type: docker-image
-  source:
-    repository: pivotalservices/concourse-curl-resource
-    tag: latest
-
 - name: bosh-deployment
   type: docker-image
   source:
@@ -14,13 +8,13 @@ resources:
 - name: source-code
   type: git
   source:
-    uri: https://github.com/diefida/metricbeat-boshrelease
+    uri: https://github.com/((github_owner))/((release_name))-boshrelease
     branch: master
 
 - name: bosh-toolkit
   type: git
   source:
-    uri: https://github.com/diefida/bosh-toolkit
+    uri: https://github.com/((github_owner))/bosh-toolkit
     branch: master
     
 - name: vbox-stemcell
@@ -31,7 +25,7 @@ resources:
 - name: staging
   type: bosh-deployment
   source:
-    deployment: metricbeat-staging
+    deployment: ((release_name))-staging
     target: ((bosh_target))
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
@@ -43,7 +37,7 @@ resources:
     driver: s3
     initial_version: 0.16.0
     bucket: bosh-releases-semver
-    key: metricbeat/version
+    key: ((release_name))/version
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
     endpoint: ((s3_endpoint))
@@ -52,8 +46,8 @@ resources:
 - name: binary-releases-repo
   type: s3
   source:
-    bucket: bosh-binary-releases
-    regexp: metricbeat/metricbeat-(.*)-*.tgz
+    bucket: binary-releases-repo
+    regexp: ((release_name))/((release_name))-(.*)-*.tgz
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
     endpoint: ((s3_endpoint))
@@ -65,17 +59,17 @@ resources:
     driver: s3
     initial_version: 0.0.0
     bucket: triggers
-    key: metricbeat/trigger
+    key: ((release_name))/trigger
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
     endpoint: ((s3_endpoint))
     disable_ssl: true
 
-- name: metricbeat-boshrelease
+- name: ((release_name))-boshrelease
   type: github-release
   source:
     owner: ((github_owner))
-    repository: metricbeat-boshrelease
+    repository: ((release_name))-boshrelease
     access_token: ((github_token))
 
 jobs:
@@ -91,23 +85,25 @@ jobs:
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:
-      release_name: metricbeat
+      release_name: ((release_name))
   - task: create-release
     file: bosh-toolkit/tasks/create-bosh-release/task.yml
     params:
-      release_name: metricbeat
+      release_name: ((release_name))
       final: true
   - get: vbox-stemcell
+  - load_var: deployment_vars
+    file: bosh-toolkit/config/((release_name))/deployment_vars.yml
+    format: yml
+    reveal: true
   - put: staging
     params:
-      manifest: source-code/manifests/metricbeat.yml
+      manifest: source-code/manifests/((release_name)).yml
       stemcells:
       - vbox-stemcell/*.tgz
       releases:
       - release/*.tgz
-      vars:
-        kibana_host: ((kibana_host))
-        elasticsearch_hosts: ((elasticsearch_hosts))
+      vars: ((.:deployment_vars))
 
 - name: publish
   plan:
@@ -118,21 +114,21 @@ jobs:
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:
-      release_name: metricbeat
+      release_name: ((release_name))
     input_mapping:
-      version: metricbeat-version
+      version: ((release_name))-version
   - get: version
     params: {bump: minor}
   - task: create-release
     file: bosh-toolkit/tasks/create-bosh-release/task.yml
     params:
-      release_name: metricbeat
+      release_name: ((release_name))
       final: true
   - task: export-release
     file: bosh-toolkit/tasks/export-release/task.yml
     params:
-      release_name: metricbeat
-      deployment: metricbeat-staging
+      release_name: ((release_name))
+      deployment: ((release_name))-staging
       BOSH_ENVIRONMENT: ((bosh_target))
       BOSH_CA_CERT: ((bosh_ca_cert))
       BOSH_CLIENT: ((bosh_client))
@@ -140,9 +136,9 @@ jobs:
   - task: prepare-release-notes
     file: bosh-toolkit/tasks/create-release-notes/task.yml
     params:
-      release_name: metricbeat
+      release_name: ((release_name))
       github_owner: ((github_owner))
-  - put: metricbeat-boshrelease
+  - put: ((release_name))-boshrelease
     params:
       name: version/version
       tag: version/version
