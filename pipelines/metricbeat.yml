@@ -137,8 +137,6 @@ jobs:
       BOSH_CA_CERT: ((bosh_ca_cert))
       BOSH_CLIENT: ((bosh_client))
       BOSH_CLIENT_SECRET: ((bosh_client_secret))
-  - put: version
-    params: {bump: minor}
   - task: prepare-release-notes
     file: bosh-toolkit/tasks/create-release-notes/task.yml
     params:
@@ -155,6 +153,8 @@ jobs:
     params:
       file: binary-release/*.tgz    
   - put: cleanup-trigger
+    params: {bump: minor}
+  - put: version
     params: {bump: minor}
 
 - name: cleanup-environment
