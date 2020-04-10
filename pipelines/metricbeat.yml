@@ -44,7 +44,7 @@ jobs:
     trigger: true
   - get: bosh-toolkit
   - task: run-specs
-    file: bosh-toolkit/tasks/run-specs-task.yml
+    file: bosh-toolkit/tasks/run-specs/task.yml
 
 - name: build-and-deploy-dev-release
   plan:

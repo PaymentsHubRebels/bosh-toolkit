@@ -4,8 +4,8 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-  repository: diefida/bosh-utils
-  tag: 'latest'
+    repository: diefida/bosh-utils
+    tag: 'latest'
 
 params:
   release_name:
