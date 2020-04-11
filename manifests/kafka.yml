@@ -87,6 +87,10 @@ stemcells:
 - alias:   default
   os:      ubuntu-xenial
   version: latest
+
+- alias: older-ubuntu-xenial
+  os: ubuntu-xenial
+  version: 456.40
   
 releases:
 - name:    kafka
@@ -99,3 +103,6 @@ releases:
   version: "0.0.10"
   url: "https://bosh.io/d/github.com/cppforlife/zookeeper-release?v=0.0.10"
   sha1: "a6d227abceebf1e3e68ce4a3cabf68b0b93165d2"
+  stemcell:
+    os: ubuntu-xenial
+    version: "456.40"
