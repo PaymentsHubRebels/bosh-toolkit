@@ -51,7 +51,7 @@ run:
 
         git_url=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").url')
         package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").package')
-        package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").ref')
+        ref=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").ref')
 
         git clone "$git_url" "$package_name"
 
