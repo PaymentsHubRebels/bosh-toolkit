@@ -19,11 +19,10 @@ instance_groups:
   persistent_disk: 10240
   networks: [{name: default}]
   jobs:
-  - name: zookeeper
-    release: zookeeper
-    properties: {}
   - name: kafka
     release: kafka
+    consumes: 
+      zookeeper: {from: zookeeper}
     properties:
       offsets:
         topic:
@@ -41,6 +40,23 @@ instance_groups:
     properties:
       username: admin
       password: ((kafka-manager-password))
+- name: zookeeper
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 1
+    ram: 1024
+    ephemeral_disk_size: 10240
+  stemcell: default
+  persistent_disk: 10240
+  networks: [{name: default}]
+  jobs:
+  - name: zookeeper
+    release: zookeeper
+    properties: {}
+    provides:
+      zookeeper: {as: zookeeper}
+
 - name: sanity-test
   azs: [z1, z2, z3]
   instances: 1
@@ -56,7 +72,7 @@ instance_groups:
     release: kafka
     consumes:
       zookeeper:
-        deployment: zookeeper
+        from: zookeeper
 
 variables:
 - name: kafka-manager-password
