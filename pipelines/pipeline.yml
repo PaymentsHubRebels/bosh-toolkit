@@ -104,6 +104,15 @@ jobs:
       releases:
       - release/*.tgz
       vars: ((.:deployment_vars))
+  - task: run-errands
+    file: bosh-toolkit/tasks/run-errands/task.yml
+    params:
+      release_name: ((release_name))
+      deployment: ((release_name))
+      BOSH_ENVIRONMENT: ((bosh_target))
+      BOSH_CA_CERT: ((bosh_ca_cert))
+      BOSH_CLIENT: ((bosh_client))
+      BOSH_CLIENT_SECRET: ((bosh_client_secret))
 
 - name: publish
   plan:
