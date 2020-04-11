@@ -1,0 +1,4 @@
+- name: python
+  url: https://github.com/diefida/python-release
+  ref: master
+  package: python-3.8
