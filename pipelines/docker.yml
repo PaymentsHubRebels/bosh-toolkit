@@ -1,0 +1,24 @@
+resources:
+- name: bosh-toolkit
+  type: git
+  source:
+    uri: https://github.com/((github_owner))/bosh-toolkit
+    branch: master
+    paths:
+      - docker/Dockerfile
+
+- name: bosh-utils-image
+  type: docker-image
+  source:
+    repository: ((docker_hub_user))/bosh-utils
+    username: ((docker_hub_user))
+    password: ((docker_hub_password))
+
+jobs:
+- name: build-and-publish
+  plan:
+  - get: bosh-toolkit
+    trigger: true
+  - put: bosh-utils-image
+    params: {build: bosh-toolkit/docker}
+    
