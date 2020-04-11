@@ -90,7 +90,7 @@ run:
         create_vendor_release "$package" "$vendor_packages_config_file"
         pushd source-code
           rm -rf "packages/$package_name"
-          bosh vendor-package "$package_name" "${workdir}/${package_name}" 
+          bosh vendor-package "$package_name" "${workdir}/${package_name}" --dir="${workdir}/${source-code}" 
         popd
       done
     fi
