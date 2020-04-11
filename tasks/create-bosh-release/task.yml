@@ -47,14 +47,20 @@ run:
         local config_file="$2"
         local git_url
         local package_name
+        local ref
 
         git_url=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").url')
         package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").package')
+        package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").ref')
 
         git clone "$git_url" "$package_name"
 
+        pushd "$package_name"
+          git checkout "$ref"
+        popd
+
         rm -rf "packages/$package_name"
-        bosh vendor_package "$package_name" "$package_name"
+        bosh vendor-package "$package_name" "$package_name"
     }
 
     bosh_options=(--force)
