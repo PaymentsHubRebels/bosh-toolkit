@@ -25,6 +25,8 @@ run:
   args:
   - -ec
   - |
+    workdir=$(pwd)
+
     function configure_local_blobstore {
       rm -rf .final_builds/
       echo '{}' > config/blobs.yml
@@ -42,9 +44,20 @@ run:
       mv final.yml config/
     }
 
-    function vendor_package {
+    function add_blobs {
+      local release_dir=$1
+      pushd "$workdir/blobs"
+        for blob in $(find * -type f); do
+          bosh add-blob --dir="$workdir/source-code" "$blob" "$blob"
+        done
+      popd
+    
+    }
+
+    function create_vendor_release {
         local package="$1"
         local config_file="$2"
+        
         local git_url
         local package_name
         local ref
@@ -57,10 +70,11 @@ run:
 
         pushd "$package_name"
           git checkout "$ref"
+        
+          configure_local_blobstore  
+          add_blobs
+          bosh create-release --force
         popd
-
-        rm -rf "packages/$package_name"
-        bosh vendor-package "$package_name" "$package_name"
     }
 
     bosh_options=(--force)
@@ -71,21 +85,21 @@ run:
 
     pushd source-code
       configure_local_blobstore
+      add_blobs
     popd
 
-    pushd blobs
-      for blob in $(find * -type f); do
-        bosh add-blob --dir=../source-code "$blob" "$blob"
+    vendor_packages_config_file="${workdir}/bosh-toolkit/config/${release_name}/vendor_packages.yml"
+
+    if [[ -f "$vendor_packages_config_file" ]]; then
+      for package in $(yq r "$vendor_packages_config_file" '[*].name'); do
+        create_vendor_release "$package" "$vendor_packages_config_file"
+        pushd source-code
+          rm -rf "packages/$package_name"
+          bosh vendor-package "$package_name" "${workdir}/${package_name}" 
+        popd
       done
-    popd
+    fi
 
     pushd source-code
-
-      if [[ -f ../bosh-toolkit/config/$release_name/vendor_packages.yml ]]; then
-        for package in $(yq r ../bosh-toolkit/config/$release_name/vendor_packages.yml '[*].name'); do
-          vendor_package "$package" "../bosh-toolkit/config/$release_name/vendor_packages.yml"
-        done
-      fi
-
       bosh create-release "${bosh_options[@]}" --tarball=../release/${release_name}-boshrelease-$(cat ../version/version).tgz
     popd
