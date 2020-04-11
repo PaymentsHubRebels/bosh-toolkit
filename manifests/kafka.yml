@@ -95,7 +95,7 @@ releases:
   version: 1.1.0
   url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
   sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
-- name: zookeeper
-  version: 0.0.10
-  sha1: 37abc951e6a3cacb4607186a42d33101ebd96500
-  url: https://s3.amazonaws.com/kafka-boshrelease/compiled-releases/zookeeper/zookeeper-0.0.10-ubuntu-xenial-456.3-20190807-230924-288267589-20190807230933.tgz
+- name: "zookeeper"
+  version: "0.0.10"
+  url: "https://bosh.io/d/github.com/cppforlife/zookeeper-release?v=0.0.10"
+  sha1: "a6d227abceebf1e3e68ce4a3cabf68b0b93165d2"
