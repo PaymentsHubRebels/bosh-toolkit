@@ -48,7 +48,7 @@ run:
       local release_dir=$1
       pushd "$workdir/blobs"
         for blob in $(find * -type f); do
-          bosh add-blob --dir="$workdir/source-code" "$blob" "$blob"
+          bosh add-blob --dir="${release_dir}" "$blob" "$blob"
         done
       popd
     
@@ -72,7 +72,7 @@ run:
           git checkout "$ref"
         
           configure_local_blobstore  
-          add_blobs
+          add_blobs $(pwd)
           bosh create-release --force
         popd
     }
@@ -82,11 +82,6 @@ run:
     if [[ "$final" == "true" ]]; then
       bosh_options=("${bosh_options[@]}" --final --version=$(cat version/version))
     fi
-
-    pushd source-code
-      configure_local_blobstore
-      add_blobs
-    popd
 
     vendor_packages_config_file="${workdir}/bosh-toolkit/config/${release_name}/vendor_packages.yml"
 
@@ -99,7 +94,9 @@ run:
         popd
       done
     fi
-
+    
     pushd source-code
+      configure_local_blobstore  
+      add_blobs $(pwd)
       bosh create-release "${bosh_options[@]}" --tarball=../release/${release_name}-boshrelease-$(cat ../version/version).tgz
     popd
