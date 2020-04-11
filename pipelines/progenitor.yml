@@ -22,3 +22,7 @@ jobs:
     file: bosh-toolkit/pipelines/pipeline.yml
     vars:
       release_name: elasticapm
+  - set_pipeline: kafka
+    file: bosh-toolkit/pipelines/pipeline.yml
+    vars:
+      release_name: kafka
