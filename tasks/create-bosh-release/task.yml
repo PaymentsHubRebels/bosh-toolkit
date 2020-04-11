@@ -15,6 +15,7 @@ inputs:
 - name: source-code
 - name: blobs
 - name: version
+- name: bosh-toolkit
 
 outputs:
 - name: release
@@ -24,11 +25,47 @@ run:
   args:
   - -ec
   - |
+    function configure_local_blobstore {
+      rm -rf .final_builds/
+      echo '{}' > config/blobs.yml
+
+      mkdir -p /tmp/blobs
+      bosh int config/final.yml -o <(cat <<EOF
+      - type: replace
+        path: /blobstore/options
+        value:
+          blobstore_path: /tmp/blobs
+      - type: replace
+        path: /blobstore/provider
+        value: local
+    EOF) > final.yml
+      mv final.yml config/
+    }
+
+    function vendor_package {
+        local package="$1"
+        local config_file="$2"
+        local git_url
+        local package_name
+
+        git_url=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").url')
+        package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").package')
+
+        git clone "$git_url" "$package_name"
+
+        rm -rf "packages/$package_name"
+        bosh vendor_package "$package_name" "$package_name"
+    }
+
     bosh_options=(--force)
 
     if [[ "$final" == "true" ]]; then
       bosh_options=("${bosh_options[@]}" --final --version=$(cat version/version))
     fi
+
+    pushd source-code
+      configure_local_blobstore
+    popd
 
     pushd blobs
       for blob in $(find * -type f); do
@@ -37,5 +74,12 @@ run:
     popd
 
     pushd source-code
+
+      if [[ -f ../bosh-toolkit/config/$release_name/vendor_packages.yml ]]; then
+        for package in $(yq r ../bosh-toolkit/config/$release_name/vendor_packages.yml '[*].name'; do
+          vendor_package "$package" "../bosh-toolkit/config/$release_name/vendor_packages.yml"
+        done
+      fi
+
       bosh create-release "${bosh_options[@]}" --tarball=../release/${release_name}-boshrelease-$(cat ../version/version).tgz
     popd
