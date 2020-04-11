@@ -1,0 +1,24 @@
+resources:
+- name: bosh-toolkit
+  type: git
+  source:
+    uri: https://github.com/((github_owner))/bosh-toolkit
+    branch: master
+    paths:
+      - pipelines/*.yml
+
+jobs:
+- name: set-all-pipelines
+  plan:
+  - get: bosh-toolkit
+    trigger: true
+  - set_pipeline: progenitor
+    file: bosh-toolkit/pipelines/progenitor.yml
+  - set_pipeline: metricbeat
+    file: bosh-toolkit/pipelines/pipeline.yml
+    vars:
+      release_name: metricbeat
+  - set_pipeline: elasticapm
+    file: bosh-toolkit/pipelines/pipeline.yml
+    vars:
+      release_name: elasticapm
