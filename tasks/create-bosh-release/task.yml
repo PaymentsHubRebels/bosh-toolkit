@@ -92,8 +92,8 @@ run:
     if [[ -f "$vendor_packages_config_file" ]]; then
       for package in $(yq r "$vendor_packages_config_file" '[*].name'); do
         create_vendor_release "$package" "$vendor_packages_config_file"
-        rm -rf "${workdir}/${source-code}/packages/$package_name"
-        bosh vendor-package --dir="${workdir}/source-code" "$package_name" "${workdir}/${package_name}"
+        rm -rf "${workdir}/source-code/packages/${package}"
+        bosh vendor-package --dir="${workdir}/source-code" "$package" "${workdir}/${package}"
       done
     fi
     
