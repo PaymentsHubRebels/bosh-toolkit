@@ -9,8 +9,8 @@ ARG yq_cli_sha1="7c77a1d71a42ded8335a2a2629e0c77c5d7fb331"
 ARG jq_cli_url="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"
 ARG jq_cli_sha1="056ba5d6bbc617c29d37158ce11fd5a443093949"
 
-RUN apt-get update && apt install -y git wget curl ruby coreutils &&\
-    gem install bundler
+RUN apt-get update && apt install -y git wget curl ruby ruby-dev build-essential coreutils &&\
+    gem install bundler && gem install ffi -v '1.12.2'
 
 RUN true \
   && wget -qO /bin/bosh ${bosh_cli_url} \
