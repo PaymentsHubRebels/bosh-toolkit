@@ -76,7 +76,7 @@ run:
     pushd source-code
 
       if [[ -f ../bosh-toolkit/config/$release_name/vendor_packages.yml ]]; then
-        for package in $(yq r ../bosh-toolkit/config/$release_name/vendor_packages.yml '[*].name'; do
+        for package in $(yq r ../bosh-toolkit/config/$release_name/vendor_packages.yml '[*].name'); do
           vendor_package "$package" "../bosh-toolkit/config/$release_name/vendor_packages.yml"
         done
       fi
