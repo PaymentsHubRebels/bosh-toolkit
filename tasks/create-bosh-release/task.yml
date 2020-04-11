@@ -23,7 +23,7 @@ outputs:
 run:
   path: bash
   args:
-  - -ec
+  - -exc
   - |
     workdir=$(pwd)
 
