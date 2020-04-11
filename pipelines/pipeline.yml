@@ -21,6 +21,7 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-xenial-go_agent
+    version_family: ((stemcell_version_family))
 
 - name: bosh-deployment
   type: bosh-deployment

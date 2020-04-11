@@ -20,11 +20,14 @@ jobs:
     file: bosh-toolkit/pipelines/pipeline.yml
     vars:
       release_name: metricbeat
+      stemcell_version_family: latest
   - set_pipeline: elasticapm
     file: bosh-toolkit/pipelines/pipeline.yml
     vars:
       release_name: elasticapm
+      stemcell_version_family: latest
   - set_pipeline: kafka
     file: bosh-toolkit/pipelines/pipeline.yml
     vars:
       release_name: kafka
+      stemcell_version_family: "456.40"
