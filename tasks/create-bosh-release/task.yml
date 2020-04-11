@@ -77,6 +77,18 @@ run:
         popd
     }
 
+    function vendor_release {
+      local package="$1"
+      local config_file="$2"
+      
+      local package_name
+      
+      package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").package')
+      
+      rm -rf "${workdir}/source-code/packages/${package_name}"
+      bosh vendor-package --dir="${workdir}/source-code" "$package_name" "${workdir}/${package_name}"
+    }
+
     bosh_options=(--force)
 
     if [[ "$final" == "true" ]]; then
@@ -92,8 +104,7 @@ run:
     if [[ -f "$vendor_packages_config_file" ]]; then
       for package in $(yq r "$vendor_packages_config_file" '[*].name'); do
         create_vendor_release "$package" "$vendor_packages_config_file"
-        rm -rf "${workdir}/source-code/packages/${package}"
-        bosh vendor-package --dir="${workdir}/source-code" "$package" "${workdir}/${package}"
+        vendor_release "$package" "$vendor_packages_config_file"
       done
     fi
     
