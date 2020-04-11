@@ -90,7 +90,7 @@ stemcells:
 
 - alias: older-ubuntu-xenial
   os: ubuntu-xenial
-  version: 456.40
+  version: "456.40"
   
 releases:
 - name:    kafka
