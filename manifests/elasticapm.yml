@@ -1,0 +1,32 @@
+name: elasticapm
+
+instance_groups:
+- name: elasticapm
+  instances: 1
+  azs:       [z1]
+  stemcell:  default
+  vm_type: default
+  networks:
+    - name: default
+  jobs:
+   - name: apm-server
+     release: elasticapm
+     properties:
+        apm-server:
+         elasticsearch:
+           hosts: ((elasticsearch_hosts))
+update:
+  canaries: 0
+  max_in_flight: 1
+  serial: true
+  canary_watch_time: 1000-120000
+  update_watch_time: 1000-120000
+
+stemcells:
+- alias:   default
+  os:      ubuntu-xenial
+  version: latest
+
+releases:
+- name:    elasticapm
+  version: latest
