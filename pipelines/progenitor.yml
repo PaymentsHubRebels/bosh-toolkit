@@ -17,17 +17,17 @@ jobs:
   - set_pipeline: bosh-utils-image
     file: bosh-toolkit/pipelines/docker.yml
   - set_pipeline: metricbeat
-    file: bosh-toolkit/pipelines/pipeline.yml
+    file: bosh-toolkit/pipelines/bosh_release.yml
     vars:
       release_name: metricbeat
       stemcell_version_family: latest
   - set_pipeline: elasticapm
-    file: bosh-toolkit/pipelines/pipeline.yml
+    file: bosh-toolkit/pipelines/bosh_release.yml
     vars:
       release_name: elasticapm
       stemcell_version_family: latest
   - set_pipeline: kafka
-    file: bosh-toolkit/pipelines/pipeline.yml
+    file: bosh-toolkit/pipelines/bosh_release.yml
     vars:
       release_name: kafka
       stemcell_version_family: "456.40"
