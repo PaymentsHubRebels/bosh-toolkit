@@ -1,0 +1,64 @@
+name: redis
+
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
+variables:
+- name: redis-password
+  type: password
+
+  instance_groups:
+- name: redis
+  azs: [z1,z2,z3]
+  instances: 3
+  vm_type: default
+  stemcell: default
+  persistent_disk: 10240
+  networks: [{name: default}]
+  jobs:
+  - name: redis
+    release: redis
+    properties:
+      password: ((redis-password))
+- name: redis-sentinel
+  azs: [z1,z2,z3]
+  instances: 3
+  vm_type: default
+  stemcell: default
+  persistent_disk: 10240
+  networks: [{name: default}]
+  jobs:
+  - name: redis-sentinel
+    release: redis
+- name: sanity-tests
+  azs: [z1,z2,z3]
+  instances: 1
+  lifecycle: errand
+  vm_type: default
+  stemcell: default
+  networks: [{name: default}]
+  jobs:
+  - name: sanity-tests
+    release: redis
+    properties:
+      master_host: ((master-host))
+
+update:
+  canaries: 0
+  max_in_flight: 1
+  serial: true
+  canary_watch_time: 1000-20000
+  update_watch_time: 1000-20000
+
+stemcells:
+- alias: default
+  os: ubuntu-xenial
+  version: latest
+
+releases:
+- name: bpm
+  version: latest
+- name: redis
+  version: latest

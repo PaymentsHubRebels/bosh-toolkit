@@ -12,8 +12,6 @@ jobs:
   plan:
   - get: bosh-toolkit
     trigger: true
-  - set_pipeline: progenitor
-    file: bosh-toolkit/pipelines/progenitor.yml
   - set_pipeline: bosh-utils-image
     file: bosh-toolkit/pipelines/docker.yml
   - set_pipeline: metricbeat
@@ -31,3 +29,8 @@ jobs:
     vars:
       release_name: kafka
       stemcell_version_family: "456.40"
+  - set_pipeline: redis
+    file: bosh-toolkit/pipelines/bosh_release.yml
+    vars:
+      release_name: redis
+      stemcell_version_family: latest

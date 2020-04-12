@@ -1,0 +1,2 @@
+- url: "http://download.redis.io/releases/redis-5.0.5.tar.gz"
+  bosh_blob_path: redis/redis-5.0.5.tar.gz
