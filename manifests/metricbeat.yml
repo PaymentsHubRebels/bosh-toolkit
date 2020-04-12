@@ -11,20 +11,33 @@ instance_groups:
   jobs:
    - name: metricbeat
      release: metricbeat
-     properties:
-       metricbeat:
-         modules:
-           enabled: []
-         kibana:
-           host: ((kibana_host))
-         elasticsearch:
-           hosts: ((elasticsearch_hosts))
-update:
-  canaries: 0
-  max_in_flight: 1
-  serial: true
-  canary_watch_time: 1000-120000
-  update_watch_time: 1000-120000
+- name: elasticsearch
+  instances: 1
+  stemcell: default
+  update:
+    max_in_flight: 1
+    serial: true
+  azs: [z1]
+  vm_type: default
+  persistent_disk: 1024
+  networks:
+  - name: default
+  jobs:
+  - name: java
+    release: openjdk
+  - name: elasticsearch
+    release: elasticsearch
+    properties:
+      elasticsearch:
+        node:
+          allow_master: true
+          allow_data: true    
+  update:
+    canaries: 0
+    max_in_flight: 1
+    serial: true
+    canary_watch_time: 1000-120000
+    update_watch_time: 1000-120000
 
 stemcells:
 - alias:   default
@@ -34,3 +47,11 @@ stemcells:
 releases:
 - name:    metricbeat
   version: latest
+- name: elasticsearch
+  version: 0.24.0
+  url: https://github.com/diefida/elasticsearch-boshrelease/releases/download/0.24.0/elasticsearch-boshrelease-0.24.0.tgz
+  sha1: 561481d4b7dd41c5f769b7e9f968f9e5ce6fb419
+- name: openjdk
+  version: 8.0.2
+  url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.2/openjdk-boshrelease-8.0.2.tgz
+  sha1: e76b73d2560d143b155e958aa06a2e266e261464
