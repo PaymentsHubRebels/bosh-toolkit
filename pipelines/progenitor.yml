@@ -34,3 +34,8 @@ jobs:
     vars:
       release_name: redis
       stemcell_version_family: latest
+  - set_pipeline: elasticsearch
+    file: bosh-toolkit/pipelines/bosh_release.yml
+    vars:
+      release_name: elasticsearch
+      stemcell_version_family: latest
