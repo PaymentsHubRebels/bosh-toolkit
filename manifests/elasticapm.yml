@@ -55,3 +55,7 @@ releases:
   version: 0.24.0
   url: https://github.com/diefida/elasticsearch-boshrelease/releases/download/0.24.0/elasticsearch-boshrelease-0.24.0.tgz
   sha1: 561481d4b7dd41c5f769b7e9f968f9e5ce6fb419
+  - name: openjdk
+    version: 8.0.2
+    url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.2/openjdk-boshrelease-8.0.2.tgz
+    sha1: e76b73d2560d143b155e958aa06a2e266e261464
