@@ -43,8 +43,6 @@ instance_groups:
   jobs:
   - name: sanity-tests
     release: redis
-    properties:
-      master_host: ((master-host))
 
 update:
   canaries: 0
