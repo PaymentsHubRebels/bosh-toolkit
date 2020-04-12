@@ -23,7 +23,7 @@ instance_groups:
           allow_master: true
           allow_data: true
   instances: 1
-  stemcell: xenial
+  stemcell: default
   update:
     max_in_flight: 1
     serial: true
