@@ -9,40 +9,37 @@ instance_groups:
   networks:
     - name: default
   jobs:
-   - name: metricbeat
-     release: metricbeat
+  - name: metricbeat
+    release: metricbeat
 - name: elasticsearch
   instances: 1
-  stemcell: default
-  update:
-    max_in_flight: 1
-    serial: true
-  azs: [z1]
+  azs:       [z1]
+  stemcell:  default
   vm_type: default
-  persistent_disk: 1024
   networks:
-  - name: default
+    - name: default
   jobs:
   - name: java
-    release: openjdk
+    release: openjdk  
   - name: elasticsearch
     release: elasticsearch
     properties:
       elasticsearch:
         node:
           allow_master: true
-          allow_data: true    
-  update:
-    canaries: 0
-    max_in_flight: 1
-    serial: true
-    canary_watch_time: 1000-120000
-    update_watch_time: 1000-120000
+          allow_data: true 
 
 stemcells:
 - alias:   default
   os:      ubuntu-xenial
   version: latest
+
+update:
+  canaries: 0
+  max_in_flight: 1
+  serial: true
+  canary_watch_time: 1000-120000
+  update_watch_time: 1000-120000  
 
 releases:
 - name:    metricbeat

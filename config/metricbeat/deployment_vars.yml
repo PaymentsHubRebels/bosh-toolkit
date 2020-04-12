@@ -1,2 +1,1 @@
-elasticsearch_hosts: [192.168.1.13]
-kibana_host: 192.168.1.13
+{}
