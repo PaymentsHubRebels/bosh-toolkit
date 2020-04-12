@@ -5,11 +5,12 @@ addons:
   jobs:
   - name: bpm
     release: bpm
+
 variables:
 - name: redis-password
   type: password
 
-  instance_groups:
+instance_groups:
 - name: redis
   azs: [z1,z2,z3]
   instances: 3
