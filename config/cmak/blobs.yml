@@ -1,0 +1,2 @@
+- url: https://github.com/yahoo/CMAK/releases/download/3.0.0.4/cmak-3.0.0.4.zip 
+  bosh_blob_path: cmak-3.0.0.4.zip 

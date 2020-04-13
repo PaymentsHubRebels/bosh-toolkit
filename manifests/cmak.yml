@@ -1,0 +1,83 @@
+---
+name: cmak
+
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
+
+instance_groups:
+- name: kafka
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 2
+    ram: 2048
+    ephemeral_disk_size: 10240
+  stemcell: default
+  persistent_disk: 10240
+  networks: [{name: default}]
+  jobs:
+  - name: zookeeper
+    release: zookeeper
+  - name: kafka
+    release: kafka
+
+- name: cmak
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_resources:
+    cpu: 1
+    ram: 1024
+    ephemeral_disk_size: 10240
+  stemcell: default
+  networks: [{name: default}]
+  jobs:
+  - name: cmak
+    release: cmak
+    properties:
+      username: admin
+      password: ((cmak-password))
+
+variables:
+- name: cmak-password
+  type: password
+
+stemcells:
+- alias: default
+  os: ubuntu-xenial
+  version: 456.latest
+
+update:
+  canaries: 1
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
+  max_in_flight: 1
+  serial: false
+
+releases:
+- name: bpm
+  sha1: 63a0581216ccc153a38824289f0bd767605401e6
+  url: https://s3.amazonaws.com/kafka-boshrelease/compiled-releases/bpm/bpm-1.0.4-ubuntu-xenial-456.3-20190807-231000-929480708-20190807231006.tgz
+  version: 1.0.4
+  stemcell:
+    os: ubuntu-xenial
+    version: "456.40"
+  
+- name: zookeeper
+  sha1: 37abc951e6a3cacb4607186a42d33101ebd96500
+  url: https://s3.amazonaws.com/kafka-boshrelease/compiled-releases/zookeeper/zookeeper-0.0.10-ubuntu-xenial-456.3-20190807-230924-288267589-20190807230933.tgz
+  version: 0.0.10
+  stemcell:
+    os: ubuntu-xenial
+    version: "456.40"
+- name: kafka
+  version: 2.5.0
+  url: https://github.com/diefida/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
+  sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
+  stemcell:
+    os: ubuntu-xenial
+    version: "456.40"
+- name: cmak
+  version: latest

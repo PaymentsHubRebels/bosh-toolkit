@@ -29,6 +29,11 @@ jobs:
     vars:
       release_name: kafka
       stemcell_version_family: "456.40"
+  - set_pipeline: cmak
+    file: bosh-toolkit/pipelines/bosh_release.yml
+    vars:
+      release_name: cmak
+      stemcell_version_family: "456.40"
   - set_pipeline: redis
     file: bosh-toolkit/pipelines/bosh_release.yml
     vars:

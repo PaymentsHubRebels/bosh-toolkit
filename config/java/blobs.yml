@@ -1,0 +1,4 @@
+- url: "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u242b08.tar.gz"
+  bosh_blob_path: jre-8u242b08.tar.gz
+- url: "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz"
+  bosh_blob_path: jre-11.0.6_10.tar.gz
