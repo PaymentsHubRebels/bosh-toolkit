@@ -27,11 +27,3 @@ run:
     pushd blobs
       ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
     popd
-    
-    if [[ -f bosh-toolkit/config/$release_name/vendor_packages.yml ]]; then
-      for package in $(yq r bosh-toolkit/config/$release_name/vendor_packages.yml '[*].name'); do
-        pushd blobs
-          ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$package/blobs.yml
-        popd  
-      done
-    fi
