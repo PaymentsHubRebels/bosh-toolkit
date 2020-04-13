@@ -71,8 +71,8 @@ run:
         pushd "$package_name"
           git checkout "$ref"
         
-          configure_local_blobstore  
-          add_blobs $(pwd)
+          # configure_local_blobstore  
+          # add_blobs $(pwd)
           bosh create-release --force
         popd
     }
