@@ -1,0 +1,5 @@
+bosh_release_url: https://github.com/diefida/elasticsearch-boshrelease
+bosh_release_branch: master
+stemcell_version_family: latest
+release_name: elasticsearch
+github_repository: elasticsearch-boshrelease
