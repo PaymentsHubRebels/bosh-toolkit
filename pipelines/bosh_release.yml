@@ -70,7 +70,7 @@ resources:
   type: github-release
   source:
     owner: ((github_owner))
-    repository: ((release_name))-boshrelease
+    repository: ((github_repository))
     access_token: ((github_token))
 
 jobs:
