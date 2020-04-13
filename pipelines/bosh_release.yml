@@ -100,7 +100,7 @@ jobs:
       - ubuntu-xenial/*.tgz
       releases:
       - release/*.tgz
-      vars: ((.:deployment_vars))
+      vars: {}
     on_failure:
       put: cleanup-trigger
       params: {bump: minor}
