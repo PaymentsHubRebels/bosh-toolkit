@@ -1,0 +1,12 @@
+- name: python
+  url: https://github.com/diefida/python-release
+  ref: master
+  package: python-2.7
+- name: java
+  url: https://github.com/bosh-packages/java-release
+  ref: master
+  package: openjdk-8
+- name: go
+  url: https://github.com/bosh-packages/golang-release
+  ref: master
+  package: golang-1.14-linux

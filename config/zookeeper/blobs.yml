@@ -1,0 +1,2 @@
+- url: https://downloads.apache.org/zookeeper/zookeeper-3.6.0/apache-zookeeper-3.6.0-bin.tar.gz
+  bosh_blob_path: zookeeper/zookeeper-3.6.0-bin.tar.gz
