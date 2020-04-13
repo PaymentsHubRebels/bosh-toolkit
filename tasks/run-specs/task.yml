@@ -18,6 +18,10 @@ run:
   - -ec
   - |
     pushd source-code
-      bundle install
-      bundle exec rspec spec/**/*.rb
+      if [[ -d spec ]]; then
+        bundle install
+        bundle exec rspec spec/**/*.rb
+      else
+        echo "spec folder not found. Skipping..."
+      fi
     popd
