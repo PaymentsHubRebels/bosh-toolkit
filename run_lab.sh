@@ -5,6 +5,13 @@ LAB_DIR="$THIS_SCRIPT_DIR/lab"
 
 BUCC_URL="https://github.com/starkandwayne/bucc"
 
+#
+# There are 4 buckets required that are not being created:
+# - binary-releases-repo (where the releases are exported once deployed successfully)
+# - blobs (temporary, as I could't find Kafka Manager already built)
+# - bosh-releases-semver (where the versions are stored)
+# - triggers (use for triggering cleanup job)
+#
 function run_minio {
   already_existing_container_id="$(docker ps -a | grep minio | head -1 | awk '{print $1}')"
 
@@ -33,7 +40,7 @@ function bucc_up {
 
 function update_cloud_config {
   pushd "$LAB_DIR/bucc"
-    bosh --non-interactive update-cloud-config src/bosh-deployment/virtualbox/cloud-config.yml
+    bosh --non-interactive update-cloud-config src/bosh-deployment/warden/cloud-config.yml
   popd
 }
 
@@ -73,7 +80,7 @@ function say_ready {
 
 function main {
   run_minio && \
-  # bucc_up && \
+  bucc_up && \
   feed_credhub && \
   update_cloud_config && \
   set_progenitor && \
