@@ -8,8 +8,8 @@ resources:
 - name: source-code
   type: git
   source:
-    uri: https://github.com/((github_owner))/((release_name))-boshrelease
-    branch: master
+    uri: ((bosh_release_url))
+    branch: ((bosh_release_branch))
 
 - name: bosh-toolkit
   type: git

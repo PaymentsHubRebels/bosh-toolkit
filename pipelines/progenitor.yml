@@ -14,33 +14,41 @@ jobs:
     trigger: true
   - set_pipeline: bosh-utils-image
     file: bosh-toolkit/pipelines/docker.yml
-  - set_pipeline: metricbeat
+  - load_var: zookeeper_location
+    file: bosh-toolkit/config/zookeeper/location.yml
+    format: yml
+  - set_pipeline: zookeeper
     file: bosh-toolkit/pipelines/bosh_release.yml
     vars:
-      release_name: metricbeat
-      stemcell_version_family: latest
-  - set_pipeline: elasticapm
-    file: bosh-toolkit/pipelines/bosh_release.yml
-    vars:
-      release_name: elasticapm
-      stemcell_version_family: latest
-  - set_pipeline: kafka
-    file: bosh-toolkit/pipelines/bosh_release.yml
-    vars:
-      release_name: kafka
-      stemcell_version_family: "456.40"
-  - set_pipeline: cmak
-    file: bosh-toolkit/pipelines/bosh_release.yml
-    vars:
-      release_name: cmak
-      stemcell_version_family: "456.40"
-  - set_pipeline: redis
-    file: bosh-toolkit/pipelines/bosh_release.yml
-    vars:
-      release_name: redis
-      stemcell_version_family: latest
-  - set_pipeline: elasticsearch
-    file: bosh-toolkit/pipelines/bosh_release.yml
-    vars:
-      release_name: elasticsearch
-      stemcell_version_family: latest
+      bosh_release_url: ((.:zookeeper_location.url)) 
+      bosh_release_branch: ((.:zookeeper_location.branch)) 
+  # - set_pipeline: metricbeat
+  #   file: bosh-toolkit/pipelines/bosh_release.yml
+  #   vars:
+  #     release_name: metricbeat
+  #     stemcell_version_family: latest
+  # - set_pipeline: elasticapm
+  #   file: bosh-toolkit/pipelines/bosh_release.yml
+  #   vars:
+  #     release_name: elasticapm
+  #     stemcell_version_family: latest
+  # - set_pipeline: kafka
+  #   file: bosh-toolkit/pipelines/bosh_release.yml
+  #   vars:
+  #     release_name: kafka
+  #     stemcell_version_family: "456.40"
+  # - set_pipeline: cmak
+  #   file: bosh-toolkit/pipelines/bosh_release.yml
+  #   vars:
+  #     release_name: cmak
+  #     stemcell_version_family: "456.40"
+  # - set_pipeline: redis
+  #   file: bosh-toolkit/pipelines/bosh_release.yml
+  #   vars:
+  #     release_name: redis
+  #     stemcell_version_family: latest
+  # - set_pipeline: elasticsearch
+  #   file: bosh-toolkit/pipelines/bosh_release.yml
+  #   vars:
+  #     release_name: elasticsearch
+  #     stemcell_version_family: latest
