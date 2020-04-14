@@ -6,6 +6,7 @@ resources:
     branch: master
     paths:
       - pipelines/*.yml
+      - config/**/pipeline_vars.yml
 
 jobs:
 - name: set-all-pipelines
