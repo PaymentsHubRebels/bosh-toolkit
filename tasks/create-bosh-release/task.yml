@@ -31,7 +31,7 @@ run:
   - |
     workdir=$(pwd)
     # For caching:
-    export BOSH_CONFIG: ${workdir}/.bosh
+    export BOSH_CONFIG=${workdir}/.bosh
 
     function configure_local_blobstore {
       rm -rf .final_builds/
