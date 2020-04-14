@@ -67,7 +67,7 @@ releases:
   
 - name: zookeeper
   version: 0.2.0
-  url: https://github.com/zookeeper-release/releases/download/0.2.0/zookeeper-release-0.2.0.tgz
+  url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
   sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
   stemcell:
     os: ubuntu-xenial
