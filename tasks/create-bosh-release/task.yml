@@ -116,7 +116,7 @@ run:
       done
     fi
     
-    tar_name="$(echo ${github_repository} | awk -F'/' '{print $2}')-$(cat ../version/version)"
+    tar_name="${github_repository}-$(cat ../version/version)"
     pushd source-code
       bosh create-release "${bosh_options[@]}" --tarball=../release/${tar_name}.tgz
     popd

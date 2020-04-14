@@ -9,6 +9,7 @@ image_resource:
 
 params:
   release_name:
+  github_owner:
   github_repository:  
 
 inputs:
@@ -33,7 +34,7 @@ run:
     releases:
     - name: ${release_name}
       version: ${release_version}
-      url: https://github.com/${github_repository}/releases/download/${release_version}/${release_tarball_name}
+      url: https://github.com/${github_owner}/${github_repository}/releases/download/${release_version}/${release_tarball_name}
       sha1: ${release_sha}
     \`\`\`
     EOF
