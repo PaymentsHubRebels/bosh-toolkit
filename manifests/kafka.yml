@@ -69,7 +69,7 @@ instance_groups:
     release: kafka
 
 variables:
-- name: kafka-manager-password
+- name: cmak-password
   type: password
 
 stemcells:
