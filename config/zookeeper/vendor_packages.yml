@@ -1,8 +1,7 @@
 - name: python
-  url: https://github.com/diefida/python-release
+  url: https://github.com/bosh-packages/python-release
   ref: master
   package: python-2.7
-  local_blobstore: true
 - name: java
   url: https://github.com/bosh-packages/java-release
   ref: master
