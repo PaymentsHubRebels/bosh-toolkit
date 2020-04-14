@@ -21,8 +21,3 @@ run:
       for release in $(bosh releases | awk '{print $1}'); do
         bosh --non-interactive delete-release $release --force
       done
-
-      for stemcell in $(bosh stemcells | awk '{print $1"/"$2}'); do
-        bosh --non-interactive delete-stemcell $stemcell --force
-      done
-
