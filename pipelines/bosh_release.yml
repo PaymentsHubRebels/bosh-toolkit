@@ -92,6 +92,7 @@ jobs:
     params:
       release_name: ((release_name))
       final: true
+      github_repository: ((github_repository))
   - get: ubuntu-xenial
   - put: bosh-deployment
     params:
@@ -134,6 +135,7 @@ jobs:
     params:
       release_name: ((release_name))
       final: true
+      github_repository: ((github_repository))
   - task: export-release
     file: bosh-toolkit/tasks/export-release/task.yml
     params:

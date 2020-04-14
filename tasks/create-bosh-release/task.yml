@@ -10,6 +10,7 @@ image_resource:
 params:
   release_name:
   final: false
+  github_repository:
 
 inputs:
 - name: source-code
@@ -115,6 +116,7 @@ run:
       done
     fi
     
+    tar_name="$(echo ${github_repository} | awk -F'/' '{print $2}')-$(cat ../version/version)"
     pushd source-code
-      bosh create-release "${bosh_options[@]}" --tarball=../release/${release_name}-boshrelease-$(cat ../version/version).tgz
+      bosh create-release "${bosh_options[@]}" --tarball=../release/${tar_name}.tgz
     popd
