@@ -22,7 +22,7 @@ outputs:
 - name: release
 
 caches:
-- path: /root/.bosh
+- path: .bosh
 
 run:
   path: bash
@@ -30,6 +30,8 @@ run:
   - -exc
   - |
     workdir=$(pwd)
+    # For caching:
+    export BOSH_CONFIG: ${workdir}/.bosh
 
     function configure_local_blobstore {
       rm -rf .final_builds/
