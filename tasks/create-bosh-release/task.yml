@@ -20,6 +20,9 @@ inputs:
 outputs:
 - name: release
 
+caches:
+- path: /root/.bosh
+
 run:
   path: bash
   args:
