@@ -8,8 +8,7 @@ image_resource:
       tag: 'latest'
 
 params:
-  release_name:
-  github_owner:  
+  github_repository:  
 
 inputs:
 - name: version  
@@ -23,18 +22,17 @@ run:
   - -ec
   - |
     release_version=$(cat version/version)
-    release_tarball_name="${release_name}-boshrelease-${release_version}.tgz"
+    release_tarball_name="${github_repository}-${release_version}.tgz"
     release_sha=$(sha1sum release/*.tgz | awk '{print $1}')
     cat <<EOF > "release-notes/note.md"
     ## BOSH Manifest
     \`\`\` yaml
     # for using in BOSH Deployment manifest
     ---
-    name: $release_name
     releases:
     - name: $release_name
       version: ${release_version}
-      url: https://github.com/${github_owner}/${release_name}-boshrelease/releases/download/${release_version}/${release_tarball_name}
+      url: https://github.com/${github_repository}/releases/download/${release_version}/${release_tarball_name}
       sha1: ${release_sha}
     \`\`\`
     EOF
