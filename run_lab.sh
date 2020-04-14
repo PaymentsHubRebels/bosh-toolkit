@@ -58,6 +58,9 @@ function feed_credhub {
     credhub set -n /concourse/main/s3_secret_access_key -t password -w "$s3_secret_access_key"
     credhub set -n /concourse/main/s3_endpoint -t value -v  "$s3_endpoint"
     credhub set -n /concourse/main/bosh_target -t value -v  "$bosh_target"
+    credhub set -n /concourse/main/bosh_client -t value -v "$bosh_client"
+    credhub set -n /concourse/main/bosh_client_secret -t password -w "$bosh_client_secret"
+    credhub set -n /concourse/main/bosh_ca_cert -t certificate --certificate "$bosh_ca_cert"
   popd
 }
 

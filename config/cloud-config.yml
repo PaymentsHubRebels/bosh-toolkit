@@ -1,0 +1,55 @@
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: eu-west-2a
+- name: z2
+  cloud_properties:
+    availability_zone: eu-west-2b
+- name: z3
+  cloud_properties:
+    availability_zone: eu-west-2c
+
+vm_types:
+- name: default
+  cloud_properties:
+    instance_type: t3.medium
+    ephemeral_disk: {size: 25_000}
+    
+disk_types:
+- name: default
+  disk_size: 3000
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - range: 192.168.240.0/26
+    gateway: 192.168.240.1
+    azs: [z1]
+    dns: [192.168.240.2]
+    reserved: [192.168.240.1-192.168.240.5]
+    cloud_properties:
+      subnet: subnet-0012134ee339e234c
+  - range: 192.168.240.64/26
+    gateway: 192.168.240.65
+    azs: [z2]
+    dns: [192.168.240.66]
+    reserved: [192.168.240.65-192.168.240.70]
+    cloud_properties:
+      subnet: subnet-0bec2b5964d1c3082
+  - range: 192.168.240.128/26
+    gateway: 192.168.240.129
+    azs: [z3]
+    dns: [192.168.240.130]
+    reserved: [192.168.240.129-192.168.240.134]
+    cloud_properties:
+      subnet: subnet-0b62cce6069802616
+- name: vip
+  type: vip
+    
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: default
+  network: default
