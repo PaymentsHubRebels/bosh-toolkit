@@ -8,6 +8,7 @@ image_resource:
       tag: 'latest'
 
 params:
+  release_name:
   github_repository:  
 
 inputs:
@@ -30,7 +31,7 @@ run:
     # for using in BOSH Deployment manifest
     ---
     releases:
-    - name: $release_name
+    - name: ${release_name}
       version: ${release_version}
       url: https://github.com/${github_repository}/releases/download/${release_version}/${release_tarball_name}
       sha1: ${release_sha}
