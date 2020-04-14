@@ -61,18 +61,22 @@ run:
         local git_url
         local package_name
         local ref
+        local local_blobstore
 
         git_url=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").url')
         package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").package')
         ref=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").ref')
+        local_blobstore=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").local_blobstore')
 
         git clone "$git_url" "$package_name"
 
         pushd "$package_name"
           git checkout "$ref"
-        
-          # configure_local_blobstore  
-          # add_blobs $(pwd)
+          if [[ "$local_blobstore" == "true" ]]; then
+            configure_local_blobstore  
+            add_blobs $(pwd)
+          fi
+
           bosh create-release --force
         popd
     }

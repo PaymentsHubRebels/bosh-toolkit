@@ -9,7 +9,6 @@ image_resource:
 
 params:
   release_name:
-
 inputs:
 - name: bosh-toolkit
 
@@ -27,3 +26,18 @@ run:
     pushd blobs
       ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
     popd
+    
+    if [[ "$download_blobs_for_vendor_packages" == "false" ]]; then
+      return 0
+    fi 
+    config_file="bosh-toolkit/config/$release_name/vendor_packages.yml"
+    if [[ -f "$config_file" ]]; then
+      for package in $(yq r "$config_file" '[*].name'); do
+        local_blobstore=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").local_blobstore')
+        pushd blobs
+          if [[ "$local_blobstore" == "true" ]]; then 
+            ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$package/blobs.yml
+          fi
+        popd  
+      done
+    fi
