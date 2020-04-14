@@ -66,9 +66,9 @@ releases:
     version: "456.40"
   
 - name: zookeeper
-  version: 0.1.0
-  url: https://github.com/PaymentsHubRebels/zookeeper-boshrelease/releases/download/0.1.0/zookeeper-boshrelease-0.1.0.tgz
-  sha1: 878ba4b4bd1481cc3325258e130763fb11179cac
+  version: 0.2.0
+  url: https://github.com/zookeeper-release/releases/download/0.2.0/zookeeper-release-0.2.0.tgz
+  sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
   stemcell:
     os: ubuntu-xenial
     version: "456.40"
