@@ -1,5 +1,5 @@
 bosh_release_url: https://github.com/diefida/kafka-boshrelease
 bosh_release_branch: master
-stemcell_version_family: "456.40"
+stemcell_version_family: latest
 release_name: kafka
 github_repository: kafka-boshrelease

@@ -34,11 +34,11 @@ instance_groups:
               factor: 1
             min:
               isr: 1
-  - name: kafka-manager
-    release: kafka
+  - name: cmak
+    release: cmak
     properties:
       username: admin
-      password: ((kafka-manager-password))
+      password: ((cmak-password))
 - name: zookeeper
   azs: [z1, z2, z3]
   instances: 1
@@ -88,10 +88,6 @@ stemcells:
 - alias:   default
   os:      ubuntu-xenial
   version: latest
-
-- alias: older-ubuntu-xenial
-  os: ubuntu-xenial
-  version: "456.40"
   
 releases:
 - name:    kafka
@@ -100,10 +96,13 @@ releases:
   version: 1.1.0
   url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
   sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
-- name: "zookeeper"
-  version: "0.0.10"
-  url: "https://bosh.io/d/github.com/cppforlife/zookeeper-release?v=0.0.10"
-  sha1: "a6d227abceebf1e3e68ce4a3cabf68b0b93165d2"
-  stemcell:
-    os: ubuntu-xenial
-    version: "456.40"
+
+- name: zookeeper
+  version: 0.2.0
+  url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
+  sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
+
+- name: cmak
+  version: 0.2.0
+  url: https://github.com/PaymentsHubRebels/cmak-boshrelease/releases/download/0.2.0/cmak-boshrelease-0.2.0.tgz
+  sha1: 8ce61ebcd86817cefc79ba5a7e10e112f013633e

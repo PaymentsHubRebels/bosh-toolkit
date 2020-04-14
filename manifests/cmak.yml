@@ -58,26 +58,19 @@ update:
 
 releases:
 - name: bpm
-  sha1: 63a0581216ccc153a38824289f0bd767605401e6
-  url: https://s3.amazonaws.com/kafka-boshrelease/compiled-releases/bpm/bpm-1.0.4-ubuntu-xenial-456.3-20190807-231000-929480708-20190807231006.tgz
-  version: 1.0.4
-  stemcell:
-    os: ubuntu-xenial
-    version: "456.40"
+  version: 1.1.0
+  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
+  sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
   
 - name: zookeeper
   version: 0.2.0
   url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
   sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
-  stemcell:
-    os: ubuntu-xenial
-    version: "456.40"
+
 - name: kafka
   version: 2.5.0
   url: https://github.com/diefida/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
   sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
-  stemcell:
-    os: ubuntu-xenial
-    version: "456.40"
+
 - name: cmak
   version: latest
