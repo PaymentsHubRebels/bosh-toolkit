@@ -92,7 +92,6 @@ jobs:
     params:
       release_name: ((release_name))
       final: true
-      github_owner: ((github_owner))
       github_repository: ((github_repository))
   - get: ubuntu-xenial
   - put: bosh-deployment
@@ -150,6 +149,7 @@ jobs:
     file: bosh-toolkit/tasks/create-release-notes/task.yml
     params:
       release_name: ((release_name))
+      github_owner: ((github_owner))
       github_repository: ((github_repository))
   - put: github-release
     params:
