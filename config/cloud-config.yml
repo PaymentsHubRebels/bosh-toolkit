@@ -2,12 +2,15 @@ azs:
 - name: z1
   cloud_properties:
     availability_zone: eu-west-2a
+  cpi: dfa23e7939c2c2bfbdf3
 - name: z2
   cloud_properties:
     availability_zone: eu-west-2b
+  cpi: dfa23e7939c2c2bfbdf3
 - name: z3
   cloud_properties:
     availability_zone: eu-west-2c
+  cpi: dfa23e7939c2c2bfbdf3
 
 vm_types:
 - name: default
