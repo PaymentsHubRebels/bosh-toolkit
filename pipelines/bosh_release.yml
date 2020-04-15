@@ -30,7 +30,7 @@ resources:
     target: ((bosh_target))
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
-    ca_cert: ((bosh_ca_cert.certificate))
+    ca_cert: ((bosh_ca_cert))
 
 - name: version
   type: semver
@@ -118,6 +118,7 @@ jobs:
     trigger: true
     passed: [acceptance]
   - get: bosh-toolkit
+  - get: ubuntu-xenial
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:
