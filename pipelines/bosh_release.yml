@@ -20,7 +20,7 @@ resources:
 - name: ubuntu-xenial
   type: bosh-io-stemcell
   source:
-    name: bosh-warden-boshlite-ubuntu-xenial-go_agent
+    name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
     version_family: ((stemcell_version_family))
 
 - name: bosh-deployment
@@ -36,35 +36,32 @@ resources:
   type: semver
   source:
     driver: s3
-    initial_version: 0.0.0
-    bucket: bosh-releases-semver
+    region_name: ((s3_region))
+    initial_version: 0.6.0
+    bucket: bosh-releases-semver-rebels
     key: ((release_name))/version
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-    disable_ssl: true
 
 - name: binary-releases-repo
   type: s3
   source:
-    bucket: binary-releases-repo
+    region_name: ((s3_region))
+    bucket: binary-releases-repo-rebels
     regexp: ((release_name))/((release_name))-(.*)-*.tgz
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-
 
 - name: cleanup-trigger
   type: semver
   source:
     driver: s3
+    region_name: ((s3_region))
     initial_version: 0.0.0
-    bucket: triggers
+    bucket: triggers-rebels
     key: ((release_name))/trigger
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-    disable_ssl: true
 
 - name: github-release
   type: github-release
@@ -122,6 +119,7 @@ jobs:
     trigger: true
     passed: [acceptance]
   - get: bosh-toolkit
+  - get: ubuntu-xenial
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:

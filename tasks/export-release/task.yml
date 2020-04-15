@@ -18,6 +18,7 @@ params:
 
 inputs:
   - name: version
+  - name: ubuntu-xenial
 outputs:
   - name: binary-release
 
@@ -26,7 +27,7 @@ run:
   args:
     - -ec
     - |
-      stemcell_version=$(bosh -d "$deployment" deployment | grep ${release_name} | awk '{print $3}' | awk -F '/' '{print $2}')
+      stemcell_version=$(cat ubuntu-xenial/version)
       bosh -d "$deployment" \
            export-release "${release_name}/$(cat version/version)" "${os}/${stemcell_version}" \
            --dir=binary-release/
