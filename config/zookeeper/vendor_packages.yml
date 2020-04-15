@@ -5,7 +5,7 @@
 - name: java
   url: https://github.com/bosh-packages/java-release
   ref: master
-  package: openjdk-8
+  package: openjdk-11
 - name: go
   url: https://github.com/bosh-packages/golang-release
   ref: master
