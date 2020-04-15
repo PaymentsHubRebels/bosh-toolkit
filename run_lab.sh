@@ -25,8 +25,9 @@ function run_minio {
 }
 
 function bucc_up {
+  mkdir -p "$LAB_DIR/bucc"
   if [[ ! -d "$LAB_DIR/bucc" ]]; then
-    pushd "$LAB_DIR/bucc"
+    pushd "$LAB_DIR"
       git clone "$BUCC_URL" "bucc"
     popd 
   fi
@@ -70,6 +71,9 @@ function set_progenitor {
     bucc fly && \
     fly -t bucc set-pipeline -p progenitor -c "$THIS_SCRIPT_DIR/pipelines/progenitor.yml" --non-interactive
     fly -t bucc unpause-pipeline -p progenitor
+    for pipeline in $(fly -t bucc pipelines | awk '{print $1}' | grep -v progenitor ); do
+      fly -t bucc pause-pipeline -p "$pipeline"
+    done
   popd
 }
 
@@ -84,7 +88,7 @@ function say_ready {
 function main {
   run_minio && \
   bucc_up && \
-  feed_credhub && \
+  feed_credhub 
   update_cloud_config && \
   set_progenitor && \
   say_ready
