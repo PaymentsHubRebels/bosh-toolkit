@@ -1,4 +1,4 @@
-bosh_release_url: https://github.com/diefida/kafka-boshrelease
+bosh_release_url: https://github.com/paymentshubrebels/kafka-boshrelease
 bosh_release_branch: master
 stemcell_version_family: "456.40"
 release_name: kafka

@@ -1,4 +1,4 @@
-bosh_release_url: https://github.com/diefida/elasticapm-boshrelease
+bosh_release_url: https://github.com/paymentshubrebels/elasticapm-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: elasticapm
