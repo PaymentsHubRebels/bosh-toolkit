@@ -1,5 +1,24 @@
 name: metricbeat
 
+releases:
+- name: metricbeat
+  version: latest
+
+- name: elasticsearch
+  version: 0.24.0
+  url: https://github.com/paymentshubrebels/elasticsearch-boshrelease/releases/download/0.24.0/elasticsearch-boshrelease-0.24.0.tgz
+  sha1: 561481d4b7dd41c5f769b7e9f968f9e5ce6fb419
+
+- name: openjdk
+  version: 8.0.2
+  url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.2/openjdk-boshrelease-8.0.2.tgz
+  sha1: e76b73d2560d143b155e958aa06a2e266e261464
+
+stemcells:
+- alias:   default
+  os:      ubuntu-xenial
+  version: latest
+
 instance_groups:
 - name: metricbeat
   instances: 1
@@ -29,11 +48,6 @@ instance_groups:
           allow_master: true
           allow_data: true 
 
-stemcells:
-- alias:   default
-  os:      ubuntu-xenial
-  version: latest
-
 update:
   canaries: 0
   max_in_flight: 1
@@ -41,14 +55,3 @@ update:
   canary_watch_time: 1000-120000
   update_watch_time: 1000-120000  
 
-releases:
-- name:    metricbeat
-  version: latest
-- name: elasticsearch
-  version: 0.24.0
-  url: https://github.com/paymentshubrebels/elasticsearch-boshrelease/releases/download/0.24.0/elasticsearch-boshrelease-0.24.0.tgz
-  sha1: 561481d4b7dd41c5f769b7e9f968f9e5ce6fb419
-- name: openjdk
-  version: 8.0.2
-  url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.2/openjdk-boshrelease-8.0.2.tgz
-  sha1: e76b73d2560d143b155e958aa06a2e266e261464

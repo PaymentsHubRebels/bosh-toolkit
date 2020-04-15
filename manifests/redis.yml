@@ -1,5 +1,18 @@
 name: redis
 
+releases:
+- name: "bpm"
+  version: "1.1.8"
+  url: "https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.8"
+  sha1: "c956394fce7e74f741e4ae8c256b480904ad5942"
+- name: redis
+  version: latest
+
+stemcells:
+- alias: default
+  os: ubuntu-xenial
+  version: latest
+
 addons:
 - name: bpm
   jobs:
@@ -50,16 +63,3 @@ update:
   serial: true
   canary_watch_time: 1000-20000
   update_watch_time: 1000-20000
-
-stemcells:
-- alias: default
-  os: ubuntu-xenial
-  version: latest
-
-releases:
-- name: "bpm"
-  version: "1.1.8"
-  url: "https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.8"
-  sha1: "c956394fce7e74f741e4ae8c256b480904ad5942"
-- name: redis
-  version: latest

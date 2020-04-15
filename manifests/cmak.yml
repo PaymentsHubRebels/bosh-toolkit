@@ -1,6 +1,30 @@
 ---
 name: cmak
 
+releases:
+- name: cmak
+  version: latest
+
+- name: bpm
+  version: 1.1.0
+  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
+  sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
+  
+- name: zookeeper
+  version: 0.2.0
+  url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
+  sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
+
+- name: kafka
+  version: 2.5.0
+  url: https://github.com/paymentshubrebels/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
+  sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
+
+stemcells:
+- alias: default
+  os: ubuntu-xenial
+  version: 456.latest
+
 addons:
 - name: bpm
   jobs:
@@ -44,33 +68,9 @@ variables:
 - name: cmak-password
   type: password
 
-stemcells:
-- alias: default
-  os: ubuntu-xenial
-  version: 456.latest
-
 update:
   canaries: 1
   canary_watch_time: 1000-60000
   update_watch_time: 1000-60000
   max_in_flight: 1
   serial: false
-
-releases:
-- name: bpm
-  version: 1.1.0
-  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
-  sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
-  
-- name: zookeeper
-  version: 0.2.0
-  url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
-  sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
-
-- name: kafka
-  version: 2.5.0
-  url: https://github.com/paymentshubrebels/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
-  sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
-
-- name: cmak
-  version: latest
