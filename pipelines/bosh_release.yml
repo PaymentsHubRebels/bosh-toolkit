@@ -173,19 +173,3 @@ jobs:
       delete:
         enabled: true
         force: true
-  - get: bosh-toolkit
-  - task: delete-releases
-    file: bosh-toolkit/tasks/delete-releases/task.yml
-    params:
-      BOSH_ENVIRONMENT: ((bosh_target))
-      BOSH_CA_CERT: ((bosh_ca_cert))
-      BOSH_CLIENT: ((bosh_client))
-      BOSH_CLIENT_SECRET: ((bosh_client_secret))
-
-  - task: delete-stemcells
-    file: bosh-toolkit/tasks/delete-stemcells/task.yml
-    params:
-      BOSH_ENVIRONMENT: ((bosh_target))
-      BOSH_CA_CERT: ((bosh_ca_cert))
-      BOSH_CLIENT: ((bosh_client))
-      BOSH_CLIENT_SECRET: ((bosh_client_secret))

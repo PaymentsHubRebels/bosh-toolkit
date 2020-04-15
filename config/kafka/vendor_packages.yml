@@ -1,5 +1,5 @@
 - name: python
-  url: https://github.com/diefida/python-release
+  url: https://github.com/paymentshubrebels/python-release
   ref: master
   package: python-3.8
   local_blobstore: true

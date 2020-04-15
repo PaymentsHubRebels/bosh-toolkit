@@ -69,7 +69,7 @@ releases:
 
 - name: kafka
   version: 2.5.0
-  url: https://github.com/diefida/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
+  url: https://github.com/paymentshubrebels/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
   sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
 
 - name: cmak
