@@ -8,13 +8,13 @@ resources:
 - name: source-code
   type: git
   source:
-    uri: ((bosh_release_url))
+    uri: https://github.com/paymentshubrebels/((bosh_release_repo_name))
     branch: ((bosh_release_branch))
 
 - name: bosh-toolkit
   type: git
   source:
-    uri: https://github.com/((github_owner))/bosh-toolkit
+    uri: https://github.com/paymentshubrebels/bosh-toolkit
     branch: master
     
 - name: ubuntu-xenial
@@ -159,15 +159,14 @@ jobs:
   - put: binary-releases-repo
     params:
       file: binary-release/*.tgz    
-  - put: cleanup-trigger
-    params: {bump: minor}
   - put: version
     params: {bump: minor}
 
 - name: cleanup-environment
   plan:
-  - get: cleanup-trigger
+  - get: version
     trigger: true
+    passed: [publish]
   - put: bosh-deployment
     params:
       delete:

@@ -1,5 +1,6 @@
-bosh_release_url: https://github.com/paymentshubrebels/redis-boshrelease
+bosh_release_url: redis-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: redis
 github_repository: redis-boshrelease
+github_owner: bosh-rebels

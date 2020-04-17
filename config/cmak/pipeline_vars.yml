@@ -1,5 +1,6 @@
-bosh_release_url: https://github.com/paymentshubrebels/cmak-boshrelease
+bosh_release_url: cmak-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: cmak
 github_repository: cmak-boshrelease
+github_owner: bosh-rebels

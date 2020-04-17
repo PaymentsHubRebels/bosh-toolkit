@@ -1,5 +1,6 @@
-bosh_release_url: https://github.com/paymentshubrebels/metricbeat-boshrelease
+bosh_release_repo_name: metricbeat-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: metricbeat
 github_repository: metricbeat-boshrelease
+github_owner: bosh-rebels

@@ -1,5 +1,6 @@
-bosh_release_url: https://github.com/paymentshubrebels/elasticapm-boshrelease
+bosh_release_url: elasticapm-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: elasticapm
 github_repository: elasticapm-boshrelease
+github_owner: bosh-rebels

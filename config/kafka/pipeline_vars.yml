@@ -1,5 +1,6 @@
-bosh_release_url: https://github.com/paymentshubrebels/kafka-boshrelease
+bosh_release_url: kafka-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: kafka
 github_repository: kafka-boshrelease
+github_owner: bosh-rebels
