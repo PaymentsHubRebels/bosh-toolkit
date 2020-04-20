@@ -1,0 +1,7 @@
+command to create pipeline
+
+fly -t sandbox-ci sp -p redis-boshrelease -c pipelines/bosh_release.yml -l config/redis/pipeline_vars.yml 
+
+fly -t sandbox-ci sp -p elasticsearch-boshrelease -c pipelines/bosh_release.yml -l config/elasticsearch/pipeline_vars.yml
+    fly -t sandbox-ci unpause-pipeline -p elasticsearch-boshrelease
+

@@ -1,6 +1,7 @@
-bosh_release_url: elasticapm-boshrelease
+bosh_release_repo_name: elasticapm-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: elasticapm
 github_repository: elasticapm-boshrelease
 github_owner: bosh-rebels
+app_initial_version: 0.25.0

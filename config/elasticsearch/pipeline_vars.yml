@@ -1,6 +1,7 @@
-bosh_release_url: elasticsearch-boshrelease
+bosh_release_repo_name: elasticsearch-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: elasticsearch
 github_repository: elasticsearch-boshrelease
 github_owner: bosh-rebels
+app_initial_version : 0.25.0

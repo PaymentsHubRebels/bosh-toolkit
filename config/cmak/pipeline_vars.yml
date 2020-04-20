@@ -1,4 +1,4 @@
-bosh_release_url: cmak-boshrelease
+bosh_release_repo_name: cmak-boshrelease
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: cmak

@@ -1,6 +1,7 @@
-bosh_release_url: zookeeper-release
+bosh_release_repo_name: zookeeper-release
 bosh_release_branch: master
 stemcell_version_family: latest
 release_name: zookeeper
 github_repository: zookeeper-release
 github_owner: bosh-rebels
+app_initial_version : 0.5.0

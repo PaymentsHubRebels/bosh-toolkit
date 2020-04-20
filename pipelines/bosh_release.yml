@@ -23,7 +23,7 @@ resources:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
     version_family: ((stemcell_version_family))
 
-- name: bosh-deployment
+- name: test-deployment
   type: bosh-deployment
   source:
     deployment: ((release_name))
@@ -37,7 +37,7 @@ resources:
   source:
     driver: s3
     region_name: ((s3_region))
-    initial_version: 0.6.0
+    initial_version: ((app_initial_version))
     bucket: bosh-releases-semver-rebels
     key: ((release_name))/version
     access_key_id: ((s3_access_key_id))
@@ -91,7 +91,7 @@ jobs:
       final: true
       github_repository: ((github_repository))
   - get: ubuntu-xenial
-  - put: bosh-deployment
+  - put: test-deployment
     params:
       manifest: bosh-toolkit/manifests/((release_name)).yml
       stemcells:
@@ -112,7 +112,7 @@ jobs:
         BOSH_CA_CERT: ((bosh_ca_cert))
         BOSH_CLIENT: ((bosh_client))
         BOSH_CLIENT_SECRET: ((bosh_client_secret))
-
+      
 - name: publish
   plan:
   - get: source-code
@@ -167,7 +167,18 @@ jobs:
   - get: version
     trigger: true
     passed: [publish]
-  - put: bosh-deployment
+  - put: test-deployment
+    params:
+      delete:
+        enabled: true
+        force: true
+
+- name: cleanup-acc-environment
+  plan:
+  - get: version
+    trigger: true
+    passed: [acceptance]
+  - put: test-deployment
     params:
       delete:
         enabled: true
