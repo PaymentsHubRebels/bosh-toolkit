@@ -8,13 +8,13 @@ resources:
 - name: source-code
   type: git
   source:
-    uri: https://github.com/paymentshubrebels/((bosh_release_repo_name))
+    uri: https://github.com/bosh-rebels/((bosh_release_repo_name))
     branch: ((bosh_release_branch))
 
 - name: bosh-toolkit
   type: git
   source:
-    uri: https://github.com/paymentshubrebels/bosh-toolkit
+    uri: https://github.com/bosh-rebels/bosh-toolkit
     branch: master
     
 - name: ubuntu-xenial
