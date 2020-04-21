@@ -1,5 +1,5 @@
 - url: "https://github.com/Yelp/kafka-utils/archive/v3.2.0.tar.gz"
-  bosh_blob_path: v3.2.0.tar.gz
+  bosh_blob_path: kafka-utils/v3.2.0.tar.gz
 - url: "https://downloads.apache.org/kafka/2.4.0/kafka_2.12-2.4.0.tgz"
   bosh_blob_path: kafka/kafka_2.12-2.4.0.tgz
 - url: "https://s3.amazonaws.com/bosh-packages-java-release/8f7f0dda-a4af-4aa5-7a36-234c3cb25065"
