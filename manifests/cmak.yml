@@ -16,9 +16,9 @@ releases:
   sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
 
 - name: kafka
-  version: 2.5.0
+  version: 2.6.0
   url: https://github.com/bosh-rebels/kafka-boshrelease/releases/download/2.6.0/kafka-boshrelease-2.6.0.tgz
-  sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
+  sha1: 47b327044e84b981aaa18b33cbb4b89ef07c3c54
 
 stemcells:
 - alias: default
