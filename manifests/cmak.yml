@@ -12,12 +12,12 @@ releases:
   
 - name: zookeeper
   version: 0.2.0
-  url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
+  url: https://github.com/bosh-rebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
   sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
 
 - name: kafka
   version: 2.5.0
-  url: https://github.com/paymentshubrebels/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
+  url: https://github.com/bosh-rebels/kafka-boshrelease/releases/download/2.5.0/kafka-boshrelease-2.5.0.tgz
   sha1: 13f1c9e8b40a4c06265d792806fac0b746fdf3ac
 
 stemcells:
