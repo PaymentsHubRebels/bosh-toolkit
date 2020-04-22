@@ -8,6 +8,8 @@ image_resource:
     tag: 'latest'
 
 params:
+  release:
+  version:
   BOSH_ENVIRONMENT:
   BOSH_CA_CERT:
   BOSH_CLIENT:
@@ -18,6 +20,6 @@ run:
   args:
     - -ec
     - |
-      for release in $(bosh releases | awk '{print $1}'); do
-        bosh --non-interactive delete-release $release --force
-      done
+    
+      bosh --non-interactive delete-release "${release}/${version} --force
+      

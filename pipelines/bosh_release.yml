@@ -91,6 +91,8 @@ jobs:
       final: true
       github_repository: ((github_repository))
   - get: ubuntu-xenial
+  - load_var: this_release_version
+    file: version/version
   - put: test-deployment
     params:
       manifest: bosh-toolkit/manifests/((release_name)).yml
@@ -98,7 +100,8 @@ jobs:
       - ubuntu-xenial/*.tgz
       releases:
       - release/*.tgz
-      vars: {}
+      vars:
+        target_version: ((.:this_release_version))
     on_failure:
       put: cleanup-trigger
       params: {bump: minor}
@@ -165,9 +168,22 @@ jobs:
 - name: cleanup-environment
   plan:
   - get: cleanup-trigger
-    trigger: true 
+    trigger: true
+  - get: version
+    params: {bump: minor}
   - put: test-deployment
     params:
       delete:
         enabled: true
         force: true
+  - load_var: this_release_version
+    file: version/version
+  - task: remove-release
+    file: bosh-toolkit/tasks/delete-releases/task.yml
+    params: 
+      release: ((release_name))
+      version: ((.:this_release_version))
+      BOSH_ENVIRONMENT: ((bosh_target))
+      BOSH_CA_CERT: ((bosh_ca_cert))
+      BOSH_CLIENT: ((bosh_client))
+      BOSH_CLIENT_SECRET: ((bosh_client_secret))
