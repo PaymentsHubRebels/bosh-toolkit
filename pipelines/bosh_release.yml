@@ -164,20 +164,8 @@ jobs:
 
 - name: cleanup-environment
   plan:
-  - get: version
-    trigger: true
-    passed: [publish]
-  - put: test-deployment
-    params:
-      delete:
-        enabled: true
-        force: true
-
-- name: cleanup-acc-environment
-  plan:
-  - get: version
-    trigger: true
-    passed: [acceptance]
+  - get: cleanup-trigger
+    trigger: true 
   - put: test-deployment
     params:
       delete:
