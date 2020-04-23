@@ -4,4 +4,4 @@ stemcell_version_family: latest
 release_name: kafka
 github_repository: kafka-boshrelease
 github_owner: bosh-rebels
-app_initial_version : 2.6.0
+app_initial_version : 2.7.0

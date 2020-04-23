@@ -20,6 +20,5 @@ run:
   args:
     - -ec
     - |
-    
-      bosh --non-interactive delete-release "${release}/${version} --force
       
+      bosh --non-interactive delete-release "${release}/${version}" --force

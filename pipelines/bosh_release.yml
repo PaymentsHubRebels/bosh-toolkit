@@ -23,7 +23,7 @@ resources:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
     version_family: ((stemcell_version_family))
 
-- name: test-deployment
+- name: deploy-and-test-release
   type: bosh-deployment
   source:
     deployment: ((release_name))
@@ -71,7 +71,7 @@ resources:
     access_token: ((github_token))
 
 jobs:
-- name: acceptance
+- name: build-and-test
   plan:
   - get: source-code
     trigger: true
@@ -93,7 +93,7 @@ jobs:
   - get: ubuntu-xenial
   - load_var: this_release_version
     file: version/version
-  - put: test-deployment
+  - put: deploy-and-test-release
     params:
       manifest: bosh-toolkit/manifests/((release_name)).yml
       stemcells:
@@ -120,7 +120,7 @@ jobs:
   plan:
   - get: source-code
     trigger: true
-    passed: [acceptance]
+    passed: [build-and-test]
   - get: bosh-toolkit
   - get: ubuntu-xenial
   - task: download-blobs
@@ -164,14 +164,20 @@ jobs:
       file: binary-release/*.tgz    
   - put: version
     params: {bump: minor}
+  - put: cleanup-trigger
+    params: {bump: minor}
+  on_failure:
+    put: cleanup-trigger
+    params: {bump: minor}
 
 - name: cleanup-environment
   plan:
   - get: cleanup-trigger
     trigger: true
+  - get: bosh-toolkit
   - get: version
     params: {bump: minor}
-  - put: test-deployment
+  - put: deploy-and-test-release
     params:
       delete:
         enabled: true
