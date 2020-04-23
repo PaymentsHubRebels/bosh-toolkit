@@ -154,8 +154,8 @@ jobs:
       github_repository: ((github_repository))
   - put: github-release
     params:
-      name: version/version
-      tag: version/version
+      name: release-version/version
+      tag: release-version/version
       body: release-notes/note.md
       globs:
         - release/*.tgz
@@ -183,7 +183,7 @@ jobs:
         enabled: true
         force: true
   - load_var: this_release_version
-    file: version/version
+    file: release-version/version
   - task: remove-release
     file: bosh-toolkit/tasks/delete-releases/task.yml
     params: 
