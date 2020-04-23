@@ -10,14 +10,14 @@ image_resource:
 params: {}
 
 inputs:
-- name: source-code
+- name: app-source-code
 
 run:
   path: bash
   args:
   - -ec
   - |
-    pushd source-code
+    pushd app-source-code
       if [[ -d spec ]]; then
         bundle install
         bundle exec rspec spec/**/*.rb
