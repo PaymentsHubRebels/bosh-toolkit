@@ -17,7 +17,7 @@ params:
   BOSH_CLIENT_SECRET:
 
 inputs:
-  - name: version
+  - name: release-version
   - name: ubuntu-xenial
 outputs:
   - name: binary-release
@@ -30,6 +30,6 @@ run:
       stemcell_version=$(cat ubuntu-xenial/version)
       bosh -d "$deployment" \
            export-release "${release_name}/$(cat release-version/version)" "${os}/${stemcell_version}" \
-           --dir=binary-release/
+           --dir=binary-release/  
   
   
