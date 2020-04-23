@@ -92,7 +92,7 @@ jobs:
       github_repository: ((github_repository))
   - get: ubuntu-xenial
   - load_var: this_release_version
-    file: version/version
+    file: release-version/version
   - put: deploy-and-test-release
     params:
       manifest: bosh-toolkit/manifests/((release_name)).yml
