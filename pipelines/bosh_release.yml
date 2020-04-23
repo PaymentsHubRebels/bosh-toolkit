@@ -5,7 +5,7 @@ resource_types:
     repository: cloudfoundry/bosh-deployment-resource
 
 resources:
-- name: source-code
+- name: app-source-code
   type: git
   source:
     uri: https://github.com/bosh-rebels/((bosh_release_repo_name))
@@ -32,7 +32,7 @@ resources:
     client_secret: ((bosh_client_secret))
     ca_cert: ((bosh_ca_cert))
 
-- name: version
+- name: release-version
   type: semver
   source:
     driver: s3
@@ -73,12 +73,12 @@ resources:
 jobs:
 - name: build-and-test
   plan:
-  - get: source-code
+  - get: app-source-code
     trigger: true
   - get: bosh-toolkit
   - task: run-specs
     file: bosh-toolkit/tasks/run-specs/task.yml
-  - get: version
+  - get: release-version
     params: {bump: minor}
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
@@ -116,11 +116,11 @@ jobs:
         BOSH_CLIENT: ((bosh_client))
         BOSH_CLIENT_SECRET: ((bosh_client_secret))
       
-- name: publish
+- name: publish-bosh-release
   plan:
-  - get: source-code
-    trigger: true
+  - get: app-source-code
     passed: [build-and-test]
+    trigger: true
   - get: bosh-toolkit
   - get: ubuntu-xenial
   - task: download-blobs
@@ -129,7 +129,7 @@ jobs:
       release_name: ((release_name))
     input_mapping:
       version: ((release_name))-version
-  - get: version
+  - get: release-version
     params: {bump: minor}
   - task: create-release
     file: bosh-toolkit/tasks/create-bosh-release/task.yml
@@ -162,7 +162,7 @@ jobs:
   - put: binary-releases-repo
     params:
       file: binary-release/*.tgz    
-  - put: version
+  - put: release-version
     params: {bump: minor}
   - put: cleanup-trigger
     params: {bump: minor}
@@ -175,7 +175,7 @@ jobs:
   - get: cleanup-trigger
     trigger: true
   - get: bosh-toolkit
-  - get: version
+  - get: release-version
     params: {bump: minor}
   - put: deploy-and-test-release
     params:
