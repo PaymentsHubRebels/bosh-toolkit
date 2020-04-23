@@ -16,7 +16,7 @@ params:
   BOSH_CLIENT_SECRET:
 
 inputs:
-  - name: version
+  - name: release-version
 outputs:
   - name: binary-release
 

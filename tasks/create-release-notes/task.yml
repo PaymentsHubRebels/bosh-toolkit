@@ -13,7 +13,7 @@ params:
   github_repository:  
 
 inputs:
-- name: version  
+- name: release-version  
 - name: release
 outputs:
 - name: release-notes
@@ -23,7 +23,7 @@ run:
   args:
   - -ec
   - |
-    release_version=$(cat version/version)
+    release_version=$(cat release-version/version)
     release_tarball_name="${github_repository}-${release_version}.tgz"
     release_sha=$(sha1sum release/*.tgz | awk '{print $1}')
     cat <<EOF > "release-notes/note.md"

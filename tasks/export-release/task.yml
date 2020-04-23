@@ -29,7 +29,7 @@ run:
     - |
       stemcell_version=$(cat ubuntu-xenial/version)
       bosh -d "$deployment" \
-           export-release "${release_name}/$(cat version/version)" "${os}/${stemcell_version}" \
+           export-release "${release_name}/$(cat release-version/version)" "${os}/${stemcell_version}" \
            --dir=binary-release/
   
   
