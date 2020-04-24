@@ -11,9 +11,9 @@ releases:
   sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
   
 - name: zookeeper
-  version: 0.2.0
-  url: https://github.com/bosh-rebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
-  sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
+  version: 0.6.0
+  url: https://github.com/bosh-rebels/zookeeper-release/releases/download/0.6.0/zookeeper-boshrelease-0.6.0.tgz
+  sha1: 416fd376ccc4fa744ea821fefedbb939bbea6628
 
 - name: kafka
   version: 2.7.0
