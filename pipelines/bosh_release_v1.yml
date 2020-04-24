@@ -1,0 +1,176 @@
+resource_types:
+- name: bosh-deployment
+  type: docker-image
+  source:
+    repository: cloudfoundry/bosh-deployment-resource
+
+resources:
+- name: app-source-code
+  type: git
+  source:
+    uri: https://github.com/bosh-rebels/((bosh_release_repo_name))
+    branch: ((bosh_release_branch))
+
+- name: bosh-toolkit
+  type: git
+  source:
+    uri: https://github.com/bosh-rebels/bosh-toolkit
+    branch: master
+    
+- name: ubuntu-xenial
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
+    version_family: ((stemcell_version_family))
+
+- name: deploy-release
+  type: bosh-deployment
+  source: &bosh-deployment-source
+    deployment: ((release_name))
+    target: ((bosh_target))
+    client: ((bosh_client))
+    client_secret: ((bosh_client_secret))
+    ca_cert: ((bosh_ca_cert))
+
+- name: remove-deployment
+  type: bosh-deployment
+  source: 
+    <<: *bosh-deployment-source
+
+- name: release-version
+  type: semver
+  source:
+    driver: s3
+    region_name: ((s3_region))
+    initial_version: ((app_initial_version))
+    bucket: bosh-releases-semver-rebels
+    key: ((release_name))/version
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
+- name: binary-releases-repo
+  type: s3
+  source:
+    region_name: ((s3_region))
+    bucket: binary-releases-repo-rebels
+    regexp: ((release_name))/((release_name))-(.*)-*.tgz
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
+- name: cleanup-trigger
+  type: semver
+  source:
+    driver: s3
+    region_name: ((s3_region))
+    initial_version: 0.0.0
+    bucket: triggers-rebels
+    key: ((release_name))/trigger
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
+- name: github-release
+  type: github-release
+  source:
+    owner: ((github_owner))
+    repository: ((github_repository))
+    access_token: ((github_token))
+
+jobs:
+- name: build-deploy-test-export-publish
+  plan:
+  - get: app-source-code
+    trigger: true
+  - get: bosh-toolkit
+  - task: run-specs
+    file: bosh-toolkit/tasks/run-specs/task.yml
+  - get: release-version
+    params: {bump: minor}
+  - task: download-blobs
+    file: bosh-toolkit/tasks/download-blobs/task.yml
+    params:
+      release_name: ((release_name))
+  - task: create-release
+    file: bosh-toolkit/tasks/create-bosh-release/task.yml
+    params:
+      release_name: ((release_name))
+      final: true
+      github_repository: ((github_repository))
+  - get: ubuntu-xenial
+  - load_var: this_release_version
+    file: release-version/version
+  - put: deploy-release
+    params:
+      manifest: bosh-toolkit/manifests/((release_name)).yml
+      stemcells:
+      - ubuntu-xenial/*.tgz
+      releases:
+      - release/*.tgz
+      vars:
+        target_version: ((.:this_release_version))
+    on_failure:
+      put: cleanup-trigger
+      params: {bump: minor}
+    on_success:
+      do :
+      - task: run-errands
+        file: bosh-toolkit/tasks/run-errands/task.yml
+        params:
+          release_name: ((release_name))
+          deployment: ((release_name))
+          BOSH_ENVIRONMENT: ((bosh_target))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_CLIENT: ((bosh_client))
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+      - task: export-release
+        file: bosh-toolkit/tasks/export-release/task.yml
+        params:
+          release_name: ((release_name))
+          deployment: ((release_name))
+          BOSH_ENVIRONMENT: ((bosh_target))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_CLIENT: ((bosh_client))
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+      - task: prepare-release-notes
+        file: bosh-toolkit/tasks/create-release-notes/task.yml
+        params:
+          release_name: ((release_name))
+          github_owner: ((github_owner))
+          github_repository: ((github_repository))
+      - put: github-release
+        params:
+          name: release-version/version
+          tag: release-version/version
+          body: release-notes/note.md
+          globs:
+            - release/*.tgz
+      - put: binary-releases-repo
+        params:
+          file: binary-release/*.tgz    
+      - put: release-version
+        params: {bump: minor}
+      - put: cleanup-trigger
+        params: {bump: minor}
+
+- name: cleanup-environment
+  plan:
+  - get: cleanup-trigger
+    trigger: true
+  - get: bosh-toolkit
+  - get: release-version
+    params: {bump: minor}
+  - put: remove-deployment
+    params:
+      delete:
+        enabled: true
+        force: true
+  - load_var: this_release_version
+    file: release-version/version
+  - task: remove-release
+    file: bosh-toolkit/tasks/delete-releases/task.yml
+    params: 
+      release: ((release_name))
+      version: ((.:this_release_version))
+      BOSH_ENVIRONMENT: ((bosh_target))
+      BOSH_CA_CERT: ((bosh_ca_cert))
+      BOSH_CLIENT: ((bosh_client))
+      BOSH_CLIENT_SECRET: ((bosh_client_secret))
