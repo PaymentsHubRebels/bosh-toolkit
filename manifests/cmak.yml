@@ -45,8 +45,6 @@ instance_groups:
   jobs:
   - name: zookeeper
     release: zookeeper
-  - name: kafka
-    release: kafka
 
 - name: cmak
   azs: [z1, z2, z3]
