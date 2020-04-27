@@ -46,7 +46,7 @@ instance_groups:
     release: cmak
     consumes:
       kafka: { deployment: kafka}
-      zookeeper: { deployment: zookeeper}
+      zookeeper: { deployment: kafka}
     properties:
       username: admin
       password: ((cmak-password))
