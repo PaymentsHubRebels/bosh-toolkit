@@ -4,3 +4,4 @@ stemcell_version_family: latest
 release_name: redis
 github_repository: redis-boshrelease
 github_owner: bosh-rebels
+app_initial_version: 0.7.0

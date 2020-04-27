@@ -4,3 +4,4 @@ stemcell_version_family: latest
 release_name: metricbeat
 github_repository: metricbeat-boshrelease
 github_owner: bosh-rebels
+app_initial_version: 0.20.0

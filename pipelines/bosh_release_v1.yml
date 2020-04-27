@@ -157,7 +157,6 @@ jobs:
     trigger: true
   - get: bosh-toolkit
   - get: release-version
-    params: {bump: minor}
   - put: remove-deployment
     params:
       delete:
