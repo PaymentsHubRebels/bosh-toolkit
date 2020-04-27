@@ -41,7 +41,7 @@ instance_groups:
   - name: kafka
     release: kafka
     provides:
-      conn: {as: kafka, shared: true}
+      kafka: {as: kafka, shared: true}
     properties:
       delete_topic: true
       offsets:
