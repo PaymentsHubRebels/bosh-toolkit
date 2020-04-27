@@ -32,22 +32,6 @@ addons:
     release: bpm
 
 instance_groups:
-- name: kafka
-  azs: [z1, z2, z3]
-  instances: 1
-  vm_resources:
-    cpu: 2
-    ram: 2048
-    ephemeral_disk_size: 10240
-  stemcell: default
-  persistent_disk: 10240
-  networks: [{name: default}]
-  jobs:
-  - name: zookeeper
-    release: zookeeper
-  - name: kafka
-    release: kafka
-
 - name: cmak
   azs: [z1, z2, z3]
   instances: 1
@@ -60,6 +44,11 @@ instance_groups:
   jobs:
   - name: cmak
     release: cmak
+    consumes:
+      - name: kafka
+        type: conn
+      - name: conn
+        type: zookeeper
     properties:
       username: admin
       password: ((cmak-password))
