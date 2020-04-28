@@ -9,16 +9,6 @@ releases:
   version: 1.1.0
   url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.0
   sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
-  
-- name: zookeeper
-  version: 0.6.0
-  url: https://github.com/bosh-rebels/zookeeper-release/releases/download/0.6.0/zookeeper-release-0.6.0.tgz
-  sha1: 416fd376ccc4fa744ea821fefedbb939bbea6628
-
-- name: kafka
-  version: 2.7.0
-  url: https://github.com/bosh-rebels/kafka-boshrelease/releases/download/2.7.0/kafka-boshrelease-2.7.0.tgz
-  sha1: 3881b92e7fbae2b7e058cfdf60a80ba9f7e1a3e8
 
 stemcells:
 - alias: default
@@ -45,8 +35,8 @@ instance_groups:
   - name: cmak
     release: cmak
     consumes:
-      kafka: { deployment: kafka}
-      zookeeper: { deployment: kafka}
+      kafka: { deployment: kafka, optional: true}
+      zookeeper: { deployment: kafka, optional: true}
     properties:
       username: admin
       password: ((cmak-password))
