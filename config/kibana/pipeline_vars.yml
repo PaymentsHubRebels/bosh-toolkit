@@ -1,0 +1,7 @@
+bosh_release_repo_name: kibana-boshrelease
+bosh_release_branch: master
+stemcell_version_family: latest
+release_name: kibana
+github_repository: kibana-boshrelease
+github_owner: bosh-rebels
+app_initial_version : 0.16.3

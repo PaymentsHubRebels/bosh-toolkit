@@ -1,0 +1,2 @@
+- url: https://artifacts.elastic.co/downloads/kibana/kibana-7.4.2-linux-x86_64.tar.gz
+  bosh_blob_path: kibana/kibana-7.4.2-linux-x86_64.tar.gz

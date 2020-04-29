@@ -1,0 +1,53 @@
+
+---
+name: kibana
+releases:
+- name: elasticsearch
+  version: 0.27.0
+  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.27.0/elasticsearch-boshrelease-0.27.0.tgz
+  sha1: 5398b3c16651378ba440378e0e80d355230138b4
+- name: openjdk
+  version: 8.0.4
+  url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.4/openjdk-boshrelease-8.0.4.tgz
+  sha1: 43979a6595282fcf4ac6269135968acc0d96d297
+- name: kibana
+  version: latest
+
+stemcells:
+- os: ubuntu-xenial
+  alias: xenial
+  version: latest
+
+instance_groups:
+- name: elasticsearch-master
+  jobs:
+  - name: java
+    release: openjdk
+  - name: elasticsearch
+    release: elasticsearch
+    properties:
+      elasticsearch:
+        node:
+          allow_master: true
+          allow_data: true
+  - name: kibana
+    release: kibana
+  instances: 1
+  stemcell: xenial
+  update:
+    max_in_flight: 1
+    serial: true
+  azs:
+  - z1
+  - z2
+  - z3
+  vm_type: small
+  persistent_disk: 1024
+  networks:
+  - name: default
+
+update:
+  canaries: 1
+  max_in_flight: 3
+  canary_watch_time: 30000-600000
+  update_watch_time: 5000-600000

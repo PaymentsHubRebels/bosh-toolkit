@@ -50,3 +50,7 @@ jobs:
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/metricbeat/pipeline_vars.yml
+  - set_pipeline: kibana
+    file: bosh-toolkit/pipelines/bosh_release.yml
+    var_files:
+    - bosh-toolkit/config/kibana/pipeline_vars.yml
