@@ -33,7 +33,7 @@ instance_groups:
   persistent_disk: 1024
   networks:
   - name: default
-- name: preupgrade
+- name: pre-upgrade
   lifecycle: errand
   jobs:
   - name: pre-upgrade
@@ -47,7 +47,7 @@ instance_groups:
   vm_type: default
   networks:
   - name: default
-- name: postupgrade
+- name: post-upgrade
   lifecycle: errand
   jobs:
   - name: post-upgrade

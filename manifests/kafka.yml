@@ -19,7 +19,7 @@ stemcells:
 - alias: default
   os: ubuntu-xenial
   version: latest
-      
+
 addons:
 - name: bpm
   jobs:
@@ -72,7 +72,7 @@ instance_groups:
       conn: {as: zookeeper, shared: true}
     properties: {}
 
-- name: sanity-test
+- name: sanitytest
   azs: [z1, z2, z3]
   instances: 1
   lifecycle: errand
