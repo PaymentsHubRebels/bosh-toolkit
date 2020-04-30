@@ -3,9 +3,9 @@
 name: kibana
 releases:
 - name: elasticsearch
-  version: 0.30.0
-  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.30.0/elasticsearch-boshrelease-0.30.0.tgz
-  sha1: 89852eaa5bb309b4809866a422d1fef9449a7c80
+  version: 0.31.0
+  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.31.0/elasticsearch-boshrelease-0.31.0.tgz
+  sha1: c01ba3338904f6e5fa48dc3358ac20c0d005506f
 - name: kibana
   version: latest
 
@@ -15,7 +15,7 @@ stemcells:
   version: latest
 
 instance_groups:
-- name: elasticsearch-master
+- name: kibana-and-elastic
   jobs:
   - name: elasticsearch
     release: elasticsearch
@@ -23,6 +23,7 @@ instance_groups:
       elasticsearch:
         node:
           allow_master: true
+          allow_ingest: true
           allow_data: true
   - name: kibana
     release: kibana
@@ -36,8 +37,8 @@ instance_groups:
   - z2
   - z3
   vm_resources:
-    cpu: 1
-    ram: 1024
+    cpu: 2
+    ram: 2048
     ephemeral_disk_size: 10240
   persistent_disk: 1024
   networks:
