@@ -3,13 +3,9 @@
 name: kibana
 releases:
 - name: elasticsearch
-  version: 0.27.0
-  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.27.0/elasticsearch-boshrelease-0.27.0.tgz
-  sha1: 5398b3c16651378ba440378e0e80d355230138b4
-- name: openjdk
-  version: 8.0.4
-  url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.4/openjdk-boshrelease-8.0.4.tgz
-  sha1: 43979a6595282fcf4ac6269135968acc0d96d297
+  version: 0.30.0
+  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.30.0/elasticsearch-boshrelease-0.30.0.tgz
+  sha1: 89852eaa5bb309b4809866a422d1fef9449a7c80
 - name: kibana
   version: latest
 
@@ -21,8 +17,6 @@ stemcells:
 instance_groups:
 - name: elasticsearch-master
   jobs:
-  - name: java
-    release: openjdk
   - name: elasticsearch
     release: elasticsearch
     properties:
