@@ -3,3 +3,7 @@
   ref: master
   package: python-3.8
   local_blobstore: true
+- name: java
+  url: https://github.com/bosh-packages/java-release
+  ref: master
+  package: openjdk-8
