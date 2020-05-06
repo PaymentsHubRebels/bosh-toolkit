@@ -7,20 +7,6 @@ image_resource:
     repository: paymentshubrebels/bosh-utils
     tag: 'latest'
 
-params:
-  release_name:
-  final: false
-  github_repository:
-
-inputs:
-- name: app-source-code
-- name: blobs
-- name: release-version
-- name: bosh-toolkit
-
-caches:
-- path: .bosh
-
 run:
   path: bash
   args:
