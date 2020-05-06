@@ -76,7 +76,7 @@ resources:
     access_token: ((github_token))
 
 jobs:
-- name: build-deploy-test-export-publish
+- name: build-deploy-test
   plan:
   - get: app-source-code
     trigger: true
@@ -120,35 +120,56 @@ jobs:
           BOSH_ENVIRONMENT: ((bosh_target))
           BOSH_CA_CERT: ((bosh_ca_cert))
           BOSH_CLIENT: ((bosh_client))
-          BOSH_CLIENT_SECRET: ((bosh_client_secret))
-      - task: export-release
-        file: bosh-toolkit/tasks/export-release/task.yml
-        params:
-          release_name: ((release_name))
-          deployment: ((release_name))
-          BOSH_ENVIRONMENT: ((bosh_target))
-          BOSH_CA_CERT: ((bosh_ca_cert))
-          BOSH_CLIENT: ((bosh_client))
-          BOSH_CLIENT_SECRET: ((bosh_client_secret))
-      - task: prepare-release-notes
-        file: bosh-toolkit/tasks/create-release-notes/task.yml
-        params:
-          release_name: ((release_name))
-          github_owner: ((github_owner))
-          github_repository: ((github_repository))
-      - put: github-release
-        params:
-          name: release-version/version
-          tag: release-version/version
-          body: release-notes/note.md
-          globs:
-            - release/*.tgz
-      - put: binary-releases-repo
-        params:
-          file: binary-release/*.tgz    
-      - put: release-version
-        params: {bump: minor}
-      - put: cleanup-trigger
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))    
+
+- name: check-tag-exist-for-this-commit
+  plan:
+  - get: app-source-code
+    passed: [build-deploy-test]
+  - get: bosh-toolkit
+  - task: check-release-exist-for-this-commie
+    file: bosh-toolkit/tasks/check-release/task.yml
+  on_failure:
+    - put: cleanup-trigger
+      params: {bump: minor}
+
+- name: export-and-publish-release
+  plan:
+  - get: app-source-code
+    passed: [check-tag-exist-for-this-commit]
+  - get: bosh-toolkit
+  - get: release-version
+    params: {bump: minor}
+  - load_var: this_release_version
+    file: release-version/version
+  - task: export-release
+    file: bosh-toolkit/tasks/export-release/task.yml
+    params:
+      release_name: ((release_name))
+      deployment: ((release_name))
+      BOSH_ENVIRONMENT: ((bosh_target))
+      BOSH_CA_CERT: ((bosh_ca_cert))
+      BOSH_CLIENT: ((bosh_client))
+      BOSH_CLIENT_SECRET: ((bosh_client_secret))
+  - task: prepare-release-notes
+    file: bosh-toolkit/tasks/create-release-notes/task.yml
+    params:
+      release_name: ((release_name))
+      github_owner: ((github_owner))
+      github_repository: ((github_repository))
+  - put: github-release
+    params:
+      name: release-version/version
+      tag: release-version/version
+      body: release-notes/note.md
+      globs:
+        - release/*.tgz
+  - put: binary-releases-repo
+    params:
+      file: binary-release/*.tgz    
+  - put: release-version
+    params: {bump: minor}
+  - put: cleanup-trigger
         params: {bump: minor}
 
 - name: cleanup-environment

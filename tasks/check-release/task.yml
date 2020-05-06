@@ -1,0 +1,41 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: paymentshubrebels/bosh-utils
+    tag: 'latest'
+
+params:
+  release_name:
+  final: false
+  github_repository:
+
+inputs:
+- name: app-source-code
+- name: blobs
+- name: release-version
+- name: bosh-toolkit
+
+caches:
+- path: .bosh
+
+run:
+  path: bash
+  args:
+  - -exc
+  - |
+    workdir=$(pwd)
+    currentCommitid=$(git rev-parse HEAD)
+    echo "current tag - ${currentCommitid}"
+    git fetch --tags
+    if git show-ref --tags | egrep -q "^${currentCommitid}"
+    then
+        echo "Found tag"
+        exit 1
+    else
+        echo "Tag not found"
+    fi
+
+        
