@@ -24,16 +24,9 @@ run:
   - -ec
   - |
 
-    ls -l blobs/*
-
-    echo "downloading blobs"
     pushd blobs
       ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
     popd
-    
-    pwd 
-    ls -lrt
-    ls -l blobs/*
     
     if [[ "$download_blobs_for_vendor_packages" == "false" ]]; then
       return 0
