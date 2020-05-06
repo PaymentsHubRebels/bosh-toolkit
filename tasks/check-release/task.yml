@@ -7,21 +7,27 @@ image_resource:
     repository: paymentshubrebels/bosh-utils
     tag: 'latest'
 
+inputs:
+- name: app-source-code
+- name: bosh-toolkit
+
 run:
   path: bash
   args:
   - -exc
   - |
     workdir=$(pwd)
-    currentCommitid=$(git rev-parse HEAD)
-    echo "current tag - ${currentCommitid}"
-    git fetch --tags
-    if git show-ref --tags | egrep -q "^${currentCommitid}"
-    then
-        echo "Found tag"
-        exit 1
-    else
-        echo "Tag not found"
-    fi
+    pushd "${workdir}/app-source-code"
+      currentCommitid=$(git rev-parse HEAD)
+      echo "current tag - ${currentCommitid}"
+      git fetch --tags
+      if git show-ref --tags | egrep -q "^${currentCommitid}"
+      then
+          echo "Found tag"
+          exit 1
+      else
+          echo "Tag not found"
+      fi
+    popd
 
         
