@@ -23,7 +23,7 @@ run:
   args:
   - -ec
   - |
-
+    ruby -v
     pushd blobs
       ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
     popd
