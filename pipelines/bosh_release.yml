@@ -84,7 +84,7 @@ jobs:
   - task: run-specs
     file: bosh-toolkit/tasks/run-specs/task.yml
   - get: release-version
-    params: {bump: minor}
+    params: {bump: patch}
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:
@@ -110,7 +110,7 @@ jobs:
     on_failure:
       do:
       - put: cleanup-trigger
-        params: {bump: minor}
+        params: {bump: patch}
     on_success:
       do:
       - task: run-errands
@@ -134,7 +134,7 @@ jobs:
     on_failure:
       do:
       - put: cleanup-trigger
-        params: {bump: minor}
+        params: {bump: patch}
 
 - name: export-and-publish-release
   plan:
@@ -143,9 +143,20 @@ jobs:
     trigger: true
   - get: bosh-toolkit
   - get: release-version
-    params: {bump: minor}
+    params: {bump: patch}
   - load_var: this_release_version
     file: release-version/version
+  - task: download-blobs
+    file: bosh-toolkit/tasks/download-blobs/task.yml
+    params:
+      release_name: ((release_name))
+  - task: create-release
+    file: bosh-toolkit/tasks/create-bosh-release/task.yml
+    params:
+      release_name: ((release_name))
+      final: true
+      github_repository: ((github_repository))
+  - get: ubuntu-xenial
   - task: export-release
     file: bosh-toolkit/tasks/export-release/task.yml
     params:
@@ -172,9 +183,9 @@ jobs:
     params:
       file: binary-release/*.tgz    
   - put: release-version
-    params: {bump: minor}
+    params: {bump: patch}
   - put: cleanup-trigger
-    params: {bump: minor}
+    params: {bump: patch}
 
 - name: cleanup-environment
   plan:
@@ -182,6 +193,7 @@ jobs:
     trigger: true
   - get: bosh-toolkit
   - get: release-version
+    params: {bump: patch}
   - put: remove-deployment
     params:
       delete:
