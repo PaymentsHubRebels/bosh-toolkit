@@ -108,10 +108,11 @@ jobs:
       vars:
         target_version: ((.:this_release_version))
     on_failure:
-      put: cleanup-trigger
-      params: {bump: minor}
+      do:
+      - put: cleanup-trigger
+        params: {bump: minor}
     on_success:
-      do :
+      do:
       - task: run-errands
         file: bosh-toolkit/tasks/run-errands/task.yml
         params:
@@ -126,17 +127,20 @@ jobs:
   plan:
   - get: app-source-code
     passed: [build-deploy-test]
+    trigger: true
   - get: bosh-toolkit
   - task: check-release-exist-for-this-commie
     file: bosh-toolkit/tasks/check-release/task.yml
-  on_failure:
-    - put: cleanup-trigger
-      params: {bump: minor}
+    on_failure:
+      do:
+      - put: cleanup-trigger
+        params: {bump: minor}
 
 - name: export-and-publish-release
   plan:
   - get: app-source-code
     passed: [check-tag-exist-for-this-commit]
+    trigger: true
   - get: bosh-toolkit
   - get: release-version
     params: {bump: minor}
@@ -170,7 +174,7 @@ jobs:
   - put: release-version
     params: {bump: minor}
   - put: cleanup-trigger
-        params: {bump: minor}
+    params: {bump: minor}
 
 - name: cleanup-environment
   plan:
