@@ -4,4 +4,4 @@ stemcell_version_family: latest
 release_name: cmak
 github_repository: cmak-boshrelease
 github_owner: bosh-rebels
-app_initial_version: 0.2.0
+app_initial_version: 0.10.0
