@@ -1,0 +1,36 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: paymentshubrebels/bosh-utils
+    tag: 'latest'
+
+inputs:
+- name: app-source-code
+- name: running-version
+- name: bumped-version
+- name: github-release
+outputs:
+- name: target-version
+
+run:
+  path: bash
+  args:
+  - -exc
+  - |
+    
+    latest_release_commit=$(cat github-release/commit_sha)
+    pushd app-source-code
+      latest_repo_commit=$(git rev-parse --verify HEAD)
+    popd
+
+    if [[ "$latest_release_commit" == "$latest_repo_commit" ]]; then
+      echo "BOSH Release has not changed. Commit: $latest_release_commit. Version: $(cat running-version/version)"
+      cp running-version/version target-version/
+    else
+      echo "BOSH Release has changed. Commit: $latest_release_commit. New version: $(cat bumped-version/version)"
+      cp bumped-version/version target-version/
+    fi
+        

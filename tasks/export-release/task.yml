@@ -17,7 +17,7 @@ params:
   BOSH_CLIENT_SECRET:
 
 inputs:
-  - name: release-version
+  - name: target-version
   - name: ubuntu-xenial
 outputs:
   - name: binary-release
@@ -27,9 +27,14 @@ run:
   args:
     - -ec
     - |
-      stemcell_version=$(cat ubuntu-xenial/version)
-      bosh -d "$deployment" \
-           export-release "${release_name}/$(cat release-version/version)" "${os}/${stemcell_version}" \
-           --dir=binary-release/  
-  
-  
+      running-version=$(cat running-version/version)
+      target-version=$(cat target-version/version)
+      if [ $target-version != $running-version]; then
+        echo "Terget version $target-version is not equal to $running-version , so exporting bosh release."
+        stemcell_version=$(cat ubuntu-xenial/version)
+        bosh -d "$deployment" \
+            export-release "${release_name}/$(cat target-version/version)" "${os}/${stemcell_version}" \
+            --dir=binary-release/
+      else
+        echo "Terget version $target-version is equal to $running-version , so NOT exporting bosh release."
+      fi

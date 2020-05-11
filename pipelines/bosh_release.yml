@@ -37,7 +37,18 @@ resources:
   source: 
     <<: *bosh-deployment-source
 
-- name: release-version
+- name: running-version
+  type: semver
+  source:
+    driver: s3
+    region_name: ((s3_region))
+    initial_version: ((app_initial_version))
+    bucket: bosh-releases-semver-rebels
+    key: ((release_name))/version
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
+- name: bumped-version
   type: semver
   source:
     driver: s3
@@ -83,7 +94,8 @@ jobs:
   - get: bosh-toolkit
   - task: run-specs
     file: bosh-toolkit/tasks/run-specs/task.yml
-  - get: release-version
+  - get: running-version
+  - get: bumped-version
     params: {bump: patch}
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
@@ -107,10 +119,6 @@ jobs:
       - release/*.tgz
       vars:
         target_version: ((.:this_release_version))
-    on_failure:
-      do:
-      - put: cleanup-trigger
-        params: {bump: patch}
     on_success:
       do:
       - task: run-errands
@@ -121,70 +129,39 @@ jobs:
           BOSH_ENVIRONMENT: ((bosh_target))
           BOSH_CA_CERT: ((bosh_ca_cert))
           BOSH_CLIENT: ((bosh_client))
-          BOSH_CLIENT_SECRET: ((bosh_client_secret))    
-
-- name: check-tag-exist-for-this-commit
-  plan:
-  - get: app-source-code
-    passed: [build-deploy-test]
-    trigger: true
-  - get: bosh-toolkit
-  - task: check-release-exist-for-this-commie
-    file: bosh-toolkit/tasks/check-release/task.yml
-    on_failure:
-      do:
-      - put: cleanup-trigger
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+      - get: github-release
+      - task: determine-version
+        file: bosh-toolkit/tasks/determine-version/task.yml
+      - task: export-release
+        file: bosh-toolkit/tasks/export-release/task.yml
+        params:
+          release_name: ((release_name))
+          deployment: ((release_name))
+          BOSH_ENVIRONMENT: ((bosh_target))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_CLIENT: ((bosh_client))
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+      - task: prepare-release-notes
+        file: bosh-toolkit/tasks/create-release-notes/task.yml
+        params:
+          release_name: ((release_name))
+          github_owner: ((github_owner))
+          github_repository: ((github_repository))
+      - put: github-release
+        params:
+          name: target-version/version
+          tag: target-version/version
+          body: release-notes/note.md
+          globs:
+            - release/*.tgz
+      - put: binary-releases-repo
+        params:
+          file: binary-release/*.tgz    
+      - put: running-version
         params: {bump: patch}
-
-- name: export-and-publish-release
-  plan:
-  - get: app-source-code
-    passed: [check-tag-exist-for-this-commit]
-    trigger: true
-  - get: bosh-toolkit
-  - get: release-version
-    params: {bump: patch}
-  - load_var: this_release_version
-    file: release-version/version
-  - task: download-blobs
-    file: bosh-toolkit/tasks/download-blobs/task.yml
-    params:
-      release_name: ((release_name))
-  - task: create-release
-    file: bosh-toolkit/tasks/create-bosh-release/task.yml
-    params:
-      release_name: ((release_name))
-      final: true
-      github_repository: ((github_repository))
-  - get: ubuntu-xenial
-  - task: export-release
-    file: bosh-toolkit/tasks/export-release/task.yml
-    params:
-      release_name: ((release_name))
-      deployment: ((release_name))
-      BOSH_ENVIRONMENT: ((bosh_target))
-      BOSH_CA_CERT: ((bosh_ca_cert))
-      BOSH_CLIENT: ((bosh_client))
-      BOSH_CLIENT_SECRET: ((bosh_client_secret))
-  - task: prepare-release-notes
-    file: bosh-toolkit/tasks/create-release-notes/task.yml
-    params:
-      release_name: ((release_name))
-      github_owner: ((github_owner))
-      github_repository: ((github_repository))
-  - put: github-release
-    params:
-      name: release-version/version
-      tag: release-version/version
-      body: release-notes/note.md
-      globs:
-        - release/*.tgz
-  - put: binary-releases-repo
-    params:
-      file: binary-release/*.tgz    
-  - put: release-version
-    params: {bump: patch}
-  - put: cleanup-trigger
+  ensure:
+    put: cleanup-trigger
     params: {bump: patch}
 
 - name: cleanup-environment
@@ -192,7 +169,7 @@ jobs:
   - get: cleanup-trigger
     trigger: true
   - get: bosh-toolkit
-  - get: release-version
+  - get: running-version
     params: {bump: patch}
   - put: remove-deployment
     params:
@@ -200,7 +177,7 @@ jobs:
         enabled: true
         force: true
   - load_var: this_release_version
-    file: release-version/version
+    file: running-version/version
   - task: remove-release
     file: bosh-toolkit/tasks/delete-releases/task.yml
     params: 

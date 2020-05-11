@@ -15,7 +15,7 @@ params:
 inputs:
 - name: app-source-code
 - name: blobs
-- name: release-version
+- name: bumped-version
 - name: bosh-toolkit
 
 outputs:
@@ -102,7 +102,7 @@ run:
     bosh_options=(--force)
 
     if [[ "$final" == "true" ]]; then
-      bosh_options=("${bosh_options[@]}" --final --version=$(cat release-version/version))
+      bosh_options=("${bosh_options[@]}" --final --version=$(cat bumped-version/version))
     fi
 
     pushd app-source-code
@@ -118,7 +118,7 @@ run:
       done
     fi
     
-    tar_name="${github_repository}-$(cat release-version/version)"
+    tar_name="${github_repository}-$(cat bumped-version/version)"
     pushd app-source-code
       bosh create-release "${bosh_options[@]}" --tarball=../release/${tar_name}.tgz
     popd
