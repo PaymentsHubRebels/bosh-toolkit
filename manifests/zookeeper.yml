@@ -3,7 +3,7 @@ name: zookeeper
 
 releases:
 - name: zookeeper
-  version: latest
+  version: ((target_version))
 
 stemcells:
 - alias: default

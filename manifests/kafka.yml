@@ -11,9 +11,9 @@ releases:
   sha1: 82e83a5e8ebd6e07f6ca0765e94eb69e03324a19
 
 - name: zookeeper
-  version: 0.2.0
-  url: https://github.com/PaymentsHubRebels/zookeeper-release/releases/download/0.2.0/zookeeper-boshrelease-0.2.0.tgz
-  sha1: 2faeeeffdc4acaa38bae121511d00b36e771eb11
+  version: 0.8.0
+  url: https://github.com/bosh-rebels/zookeeper-release/releases/download/0.8.0/zookeeper-release-0.8.0.tgz
+  sha1: 5cf918c2b0c42e93703de0d186bd33820bdcc93b
 
 stemcells:
 - alias: default

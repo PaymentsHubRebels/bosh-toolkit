@@ -25,10 +25,7 @@ instance_groups:
 - name: cmak
   azs: [z1, z2, z3]
   instances: 1
-  vm_resources:
-    cpu: 1
-    ram: 1024
-    ephemeral_disk_size: 10240
+  vm_type: default
   stemcell: default
   networks: [{name: default}]
   jobs:

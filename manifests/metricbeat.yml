@@ -2,17 +2,12 @@ name: metricbeat
 
 releases:
 - name: metricbeat
-  version: latest
+  version: ((target_version))
 
 - name: elasticsearch
-  version: 0.24.0
-  url: https://github.com/paymentshubrebels/elasticsearch-boshrelease/releases/download/0.24.0/elasticsearch-boshrelease-0.24.0.tgz
-  sha1: 561481d4b7dd41c5f769b7e9f968f9e5ce6fb419
-
-- name: openjdk
-  version: 8.0.2
-  url: https://github.com/making/openjdk-boshrelease/releases/download/8.0.2/openjdk-boshrelease-8.0.2.tgz
-  sha1: e76b73d2560d143b155e958aa06a2e266e261464
+  version: 0.31.0
+  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.31.0/elasticsearch-boshrelease-0.31.0.tgz
+  sha1: c01ba3338904f6e5fa48dc3358ac20c0d005506f
 
 stemcells:
 - alias:   default
@@ -38,8 +33,6 @@ instance_groups:
   networks:
     - name: default
   jobs:
-  - name: java
-    release: openjdk  
   - name: elasticsearch
     release: elasticsearch
     properties:

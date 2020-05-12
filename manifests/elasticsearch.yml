@@ -3,7 +3,7 @@ name: elasticsearch
 
 releases:
 - name: elasticsearch
-  version: latest
+  version: ((target_version))
 
 stemcells:
 - os: ubuntu-xenial
