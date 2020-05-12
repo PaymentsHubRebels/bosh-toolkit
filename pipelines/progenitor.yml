@@ -13,44 +13,45 @@ jobs:
   plan:
   - get: bosh-toolkit
     trigger: true
-  - set_pipeline: bosh-utils-image
-    file: bosh-toolkit/pipelines/docker.yml
+  # - set_pipeline: bosh-utils-image
+  #   file: bosh-toolkit/pipelines/docker.yml
 
-  - set_pipeline: zookeeper
+  - set_pipeline: zookeeper-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/zookeeper/pipeline_vars.yml
 
-  - set_pipeline: kafka
+  - set_pipeline: kafka-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/kafka/pipeline_vars.yml
 
-  - set_pipeline: cmak
+  - set_pipeline: cmak-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/cmak/pipeline_vars.yml
 
-  - set_pipeline: redis
+  - set_pipeline: redis-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/redis/pipeline_vars.yml
   
-  - set_pipeline: elasticsearch
+  - set_pipeline: elasticsearch-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/elasticsearch/pipeline_vars.yml
   
-  - set_pipeline: elasticapm
+  - set_pipeline: elasticapm-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/elasticapm/pipeline_vars.yml
 
-  - set_pipeline: metricbeat
+  - set_pipeline: metricbeat-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/metricbeat/pipeline_vars.yml
-  - set_pipeline: kibana
+    
+  - set_pipeline: kibana-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/kibana/pipeline_vars.yml

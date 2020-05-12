@@ -59,6 +59,17 @@ resources:
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 
+- name: target-version
+  type: semver
+  source:
+    driver: s3
+    region_name: ((s3_region))
+    initial_version: ((app_initial_version))
+    bucket: bosh-releases-semver-rebels
+    key: ((release_name))/target/version
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
 - name: binary-releases-repo
   type: s3
   source:
@@ -92,11 +103,16 @@ jobs:
   - get: app-source-code
     trigger: true
   - get: bosh-toolkit
-  - task: run-specs
-    file: bosh-toolkit/tasks/run-specs/task.yml
   - get: running-version
   - get: bumped-version
     params: {bump: patch}
+  - get: github-release
+  - task: determine-version
+    file: bosh-toolkit/tasks/determine-version/task.yml
+  - put: target-version
+    params: {file: target/version}
+  - task: run-specs
+    file: bosh-toolkit/tasks/run-specs/task.yml
   - task: download-blobs
     file: bosh-toolkit/tasks/download-blobs/task.yml
     params:
@@ -109,7 +125,7 @@ jobs:
       github_repository: ((github_repository))
   - get: ubuntu-xenial
   - load_var: this_release_version
-    file: bumped-version/version
+    file: target-version/version
   - put: deploy-release
     params:
       manifest: bosh-toolkit/manifests/((release_name)).yml
@@ -124,15 +140,11 @@ jobs:
       - task: run-errands
         file: bosh-toolkit/tasks/run-errands/task.yml
         params:
-          release_name: ((release_name))
           deployment: ((release_name))
           BOSH_ENVIRONMENT: ((bosh_target))
           BOSH_CA_CERT: ((bosh_ca_cert))
           BOSH_CLIENT: ((bosh_client))
           BOSH_CLIENT_SECRET: ((bosh_client_secret))
-      - get: github-release
-      - task: determine-version
-        file: bosh-toolkit/tasks/determine-version/task.yml
       - task: export-release
         file: bosh-toolkit/tasks/export-release/task.yml
         params:
@@ -162,12 +174,13 @@ jobs:
         params: {bump: patch}
   ensure:
     put: cleanup-trigger
-    params: {file: bumped-version/version}
+    params: {bump: patch}
 
 - name: cleanup-environment
   plan:
   - get: cleanup-trigger
     trigger: true
+  - get: target-version
   - get: bosh-toolkit
   - put: remove-deployment
     params:
@@ -175,7 +188,7 @@ jobs:
         enabled: true
         force: true
   - load_var: this_release_version
-    file: cleanup-trigger/version
+    file: target-version/version
   - task: remove-release
     file: bosh-toolkit/tasks/delete-releases/task.yml
     params: 
