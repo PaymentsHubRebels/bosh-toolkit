@@ -27,7 +27,7 @@ caches:
 run:
   path: bash
   args:
-  - -exc
+  - -ec
   - |
     workdir=$(pwd)
     # For caching:

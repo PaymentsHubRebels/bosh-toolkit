@@ -18,7 +18,7 @@ outputs:
 run:
   path: bash
   args:
-  - -exc
+  - -ec
   - |
     
     latest_release_commit=$(cat github-release/commit_sha)

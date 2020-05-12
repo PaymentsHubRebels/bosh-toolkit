@@ -23,22 +23,29 @@ run:
   args:
   - -ec
   - |
-    ruby -v
+    echo "Cleaning up cache unused blobs..."
+    pushd blobs
+      ruby ../bosh-toolkit/tasks/download-blobs/remove_unused_blobs.rb ../bosh-toolkit/config
+    popd
+    echo "Cleaning up cache unused blobs finished."
+
+    echo "Downloading blobs for $release_name..." 
     pushd blobs
       ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
     popd
-    
-    if [[ "$download_blobs_for_vendor_packages" == "false" ]]; then
-      return 0
-    fi 
+    echo "Downloading blobs for $release_name finished."
+
+    # We need to download all the blobs that are required by the packages this release needs to vendor.
     config_file="bosh-toolkit/config/$release_name/vendor_packages.yml"
     if [[ -f "$config_file" ]]; then
       for package in $(yq r "$config_file" '[*].name'); do
+        echo "Downloading blobs for $package..." 
         local_blobstore=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").local_blobstore')
         pushd blobs
           if [[ "$local_blobstore" == "true" ]]; then 
             ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$package/blobs.yml
           fi
-        popd  
+        popd
+        echo "Downloading blobs for $package finished."  
       done
     fi
