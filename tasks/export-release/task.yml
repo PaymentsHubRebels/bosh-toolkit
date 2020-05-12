@@ -18,6 +18,7 @@ params:
 
 inputs:
   - name: target-version
+  - name: running-version
   - name: ubuntu-xenial
 outputs:
   - name: binary-release

@@ -13,7 +13,8 @@ params:
   github_repository:  
 
 inputs:
-- name: target-version  
+- name: target-version
+- name: running-version  
 - name: release
 outputs:
 - name: release-notes
