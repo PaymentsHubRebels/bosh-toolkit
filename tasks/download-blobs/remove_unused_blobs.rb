@@ -1,10 +1,10 @@
 require 'set'
 require 'yaml'
 
-all_blobs_config_dir = YAML.load_file(ARGV[0])
+all_blobs_config_dir = ARGV[0]
 
 def all_blobs_yml
-  Dir.glob("#{all_blobs_config}/**/blobs.yml")
+  Dir.glob("#{all_blobs_config_dir}/**/blobs.yml")
 end
 
 def merged_blobs_config
