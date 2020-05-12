@@ -27,7 +27,7 @@ run:
 
     running_version=$(cat running-version/version)
     target_version=$(cat target-version/version)
-    if [[ $target_version != $running_version]]; then
+    if [[ $target_version != $running_version ]]; then
       echo "Terget version ${target_version} is not equal to ${running_version} , so creating release note."
       release_version=$(cat target-version/version)
       release_tarball_name="${github_repository}-${release_version}.tgz"
