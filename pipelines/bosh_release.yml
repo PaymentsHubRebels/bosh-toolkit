@@ -162,22 +162,20 @@ jobs:
         params: {bump: patch}
   ensure:
     put: cleanup-trigger
-    params: {bump: patch}
+    params: {file: bumped-version/version}
 
 - name: cleanup-environment
   plan:
   - get: cleanup-trigger
     trigger: true
   - get: bosh-toolkit
-  - get: running-version
-    params: {bump: patch}
   - put: remove-deployment
     params:
       delete:
         enabled: true
         force: true
   - load_var: this_release_version
-    file: running-version/version
+    file: cleanup-trigger/version
   - task: remove-release
     file: bosh-toolkit/tasks/delete-releases/task.yml
     params: 
