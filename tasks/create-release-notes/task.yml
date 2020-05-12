@@ -44,7 +44,7 @@ run:
         url: https://github.com/${github_owner}/${github_repository}/releases/download/${release_version}/${release_tarball_name}
         sha1: ${release_sha}
       \`\`\`
-EOF
+    EOF
     else
       echo "Terget version ${target_version} is equal to ${running-version} , so NOT creating release note."
     fi
