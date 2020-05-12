@@ -1,7 +1,9 @@
 require 'set'
 require 'yaml'
 
-all_blobs_config_dir = ARGV[0]
+def all_blobs_config_dir
+  ARGV[0]
+end
 
 def all_blobs_yml
   Dir.glob("#{all_blobs_config_dir}/**/blobs.yml")
