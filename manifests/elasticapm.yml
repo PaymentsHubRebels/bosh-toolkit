@@ -7,7 +7,7 @@ releases:
 - name: elasticsearch
   version: 0.31.0
   url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.31.0/elasticsearch-boshrelease-0.31.0.tgz
-  sha1: c01ba3338904f6e5fa48dc3358ac20c0d005506f
+  sha1: 9217d2e1091b3d53dc48f89f8732b5745f087506
 
 stemcells:
 - alias:   default
