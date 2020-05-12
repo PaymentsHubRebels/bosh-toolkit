@@ -13,7 +13,7 @@ inputs:
 - name: bumped-version
 - name: github-release
 outputs:
-- name: target-version
+- name: target
 
 run:
   path: bash
@@ -28,9 +28,9 @@ run:
 
     if [[ "$latest_release_commit" == "$latest_repo_commit" ]]; then
       echo "BOSH Release has not changed. Commit: $latest_release_commit. Version: $(cat running-version/version)"
-      cp running-version/version target-version/
+      cp running-version/version target/
     else
+      cp bumped-version/version target/
       echo "BOSH Release has changed. Commit: $latest_release_commit. New version: $(cat bumped-version/version)"
-      cp bumped-version/version target-version/
     fi
         

@@ -8,17 +8,11 @@ image_resource:
     tag: 'latest'
 
 params:
-  release_name:
   deployment:   
   BOSH_ENVIRONMENT:
   BOSH_CA_CERT:
   BOSH_CLIENT:
   BOSH_CLIENT_SECRET:
-
-inputs:
-  - name: bumped-version
-outputs:
-  - name: binary-release
 
 run:
   path: /bin/bash

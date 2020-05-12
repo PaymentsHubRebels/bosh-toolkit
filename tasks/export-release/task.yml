@@ -18,7 +18,6 @@ params:
 
 inputs:
   - name: target-version
-  - name: running-version
   - name: ubuntu-xenial
 outputs:
   - name: binary-release
@@ -28,15 +27,9 @@ run:
   args:
     - -ec
     - |
-      
-      running_version=$(cat running-version/version)
       target_version=$(cat target-version/version)
-      if [[ "$target_version" != "$running_version" ]]; then
-        echo "Terget version ${target_version} is not equal to ${running_version} , so exporting bosh release."
-        stemcell_version=$(cat ubuntu-xenial/version)
-        bosh -d "$deployment" \
-            export-release "${release_name}/$(cat target-version/version)" "${os}/${stemcell_version}" \
-            --dir=binary-release/
-      else
-        echo "Terget version ${target_version} is equal to ${running_version} , so NOT exporting bosh release."
-      fi
+      stemcell_version=$(cat ubuntu-xenial/version)
+      
+      bosh -d "$deployment" \
+          export-release "${release_name}/${target_version}" "${os}/${stemcell_version}" \
+          --dir=binary-release/
