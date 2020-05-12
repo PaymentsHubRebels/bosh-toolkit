@@ -28,14 +28,15 @@ run:
   args:
     - -ec
     - |
-      running-version=$(cat running-version/version)
-      target-version=$(cat target-version/version)
-      if [[ "$target-version" != "$running-version" ]]; then
-        echo "Terget version $target-version is not equal to $running-version , so exporting bosh release."
+      
+      running_version=$(cat running-version/version)
+      target_version=$(cat target-version/version)
+      if [[ "$target_version" != "$running_version" ]]; then
+        echo "Terget version ${target_version} is not equal to ${running_version} , so exporting bosh release."
         stemcell_version=$(cat ubuntu-xenial/version)
         bosh -d "$deployment" \
             export-release "${release_name}/$(cat target-version/version)" "${os}/${stemcell_version}" \
             --dir=binary-release/
       else
-        echo "Terget version $target-version is equal to $running-version , so NOT exporting bosh release."
+        echo "Terget version ${target_version} is equal to ${running_version} , so NOT exporting bosh release."
       fi
