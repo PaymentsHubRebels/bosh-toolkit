@@ -1,4 +1,0 @@
-- name: "bpm"
-  url: https://github.com/cloudfoundry/bpm-release
-  ref: master
-  package: bpm
