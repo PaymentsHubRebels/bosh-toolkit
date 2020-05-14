@@ -56,7 +56,7 @@ jobs:
     var_files:
     - bosh-toolkit/config/kibana/pipeline_vars.yml
 
-    - set_pipeline: bpm-boshrelease
+  - set_pipeline: bpm-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/bpm/pipeline_vars.yml
