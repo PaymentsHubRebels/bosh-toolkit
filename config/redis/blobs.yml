@@ -1,4 +1,2 @@
 - url: "http://download.redis.io/releases/redis-5.0.8.tar.gz"
   bosh_blob_path: redis/redis-5.0.8.tar.gz
-- url: "https://github.com/cloudfoundry/bpm-release/archive/v1.1.8.tar.gz"
-  bosh_blob_path: bpm/bpm-release-1.1.8.tgz

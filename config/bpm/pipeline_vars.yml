@@ -1,0 +1,7 @@
+bosh_release_repo_name: bpm-boshrelease
+bosh_release_branch: master
+stemcell_version_family: latest
+release_name: bpm
+github_repository: bpm-boshrelease
+github_owner: bosh-rebels
+app_initial_version: 1.1.8
