@@ -75,7 +75,7 @@ resources:
   source:
     region_name: ((s3_region))
     bucket: binary-releases-repo-rebels
-    regexp: ((release_name))/((release_name))-(.*)-*.tgz
+    regexp: ((release_name))/(.*)-*.tgz
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 

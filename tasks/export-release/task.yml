@@ -19,6 +19,7 @@ params:
 inputs:
   - name: target-version
   - name: ubuntu-xenial
+  - name: bosh-toolkit
 outputs:
   - name: binary-release
 
@@ -29,7 +30,13 @@ run:
     - |
       target_version=$(cat target-version/version)
       stemcell_version=$(cat ubuntu-xenial/version)
-      
-      bosh -d "$deployment" \
-          export-release "${release_name}/${target_version}" "${os}/${stemcell_version}" \
+      popd bosh-toolkit/manifest
+      export release_name="${release_name}"
+      mapfile -t app_list < <( ruby -e 'require "yaml";YAML.load_file(ENV["release_name"]+".yml")["releases"].each { |rel| puts "#{rel["name"]}/#{rel["version"]}"}' 2> /tmp/ruby-error )
+      echo $app_list | sed -e "s/((target_version))/${target_version}/g" > app_list
+
+      for app in $(cat app_list); do
+        bosh -d "$deployment" \
+          export-release "${app}" "${os}/${stemcell_version}" \
           --dir=binary-release/
+      done
