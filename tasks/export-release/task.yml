@@ -26,7 +26,7 @@ outputs:
 run:
   path: /bin/bash
   args:
-    - -ec
+    - -exc
     - |
       export target_version=$(cat target-version/version)
       export stemcell_version=$(cat ubuntu-xenial/version)
