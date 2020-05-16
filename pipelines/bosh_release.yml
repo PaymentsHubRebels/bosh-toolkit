@@ -153,10 +153,6 @@ jobs:
           github_repository: ((github_repository))
       - task: upload-release-s3
         file: bosh-toolkit/tasks/upload-release-s3/task.yml
-        params:
-          AWS_REGION: ((s3_region))
-          AWS_ACCESS_KEY: ((s3_access_key_id))
-          AWS_SECRET_KEY: ((s3_secret_access_key))
       - put: github-release
         params:
           name: target-version/version
