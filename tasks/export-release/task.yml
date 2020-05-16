@@ -38,6 +38,6 @@ run:
       for release in $release_list; do
         bosh -d "$deployment" \
           export-release "${release}" "${os}/${stemcell_version}" \
-          --dir=binary-release/
+          --dir=../../binary-release/
       done
       popd
