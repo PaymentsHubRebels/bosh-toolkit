@@ -152,7 +152,7 @@ jobs:
           github_owner: ((github_owner))
           github_repository: ((github_repository))
       - task: upload-release-s3
-        file: bosh-toolkit/tasks/uload-release-s3/task.yml
+        file: bosh-toolkit/tasks/upload-release-s3/task.yml
         params:
           AWS_REGION: ((s3_region))
           AWS_ACCESS_KEY: ((s3_access_key_id))
