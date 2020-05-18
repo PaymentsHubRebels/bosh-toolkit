@@ -19,17 +19,25 @@ params:
 inputs:
   - name: target-version
   - name: ubuntu-xenial
+  - name: bosh-toolkit
 outputs:
   - name: binary-release
 
 run:
   path: /bin/bash
   args:
-    - -ec
+    - -exc
     - |
-      target_version=$(cat target-version/version)
-      stemcell_version=$(cat ubuntu-xenial/version)
-      
-      bosh -d "$deployment" \
-          export-release "${release_name}/${target_version}" "${os}/${stemcell_version}" \
-          --dir=binary-release/
+      export target_version=$(cat target-version/version)
+      export stemcell_version=$(cat ubuntu-xenial/version)
+      export release_name="${release_name}"
+
+      pushd bosh-toolkit/manifests
+      release_list=$(ruby ../tasks/export-release/release_version.rb)
+
+      for release in $release_list; do
+        bosh -d "$deployment" \
+          export-release "${release}" "${os}/${stemcell_version}" \
+          --dir=../../binary-release/
+      done
+      popd

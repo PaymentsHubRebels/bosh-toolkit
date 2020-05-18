@@ -70,15 +70,6 @@ resources:
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 
-- name: binary-releases-repo
-  type: s3
-  source:
-    region_name: ((s3_region))
-    bucket: binary-releases-repo-rebels
-    regexp: ((release_name))/((release_name))-(.*)-*.tgz
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
-
 - name: cleanup-trigger
   type: semver
   source:
@@ -160,16 +151,15 @@ jobs:
           release_name: ((release_name))
           github_owner: ((github_owner))
           github_repository: ((github_repository))
+      - task: upload-release-s3
+        file: bosh-toolkit/tasks/upload-release-s3/task.yml
       - put: github-release
         params:
           name: target-version/version
           tag: target-version/version
           body: release-notes/note.md
           globs:
-            - release/*.tgz
-      - put: binary-releases-repo
-        params:
-          file: binary-release/*.tgz    
+            - release/*.tgz 
       - put: running-version
         params: {file: target/version}
   ensure:

@@ -1,0 +1,28 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: diefida/bosh-utils
+    tag: 'latest'
+
+inputs:
+  - name: binary-release
+
+run:
+  path: /bin/bash
+  args:
+    - -exc
+    - |
+      export AWS_DEFAULT_REGION=((s3_region))
+      export AWS_ACCESS_KEY_ID=((s3_access_key_id))
+      export AWS_SECRET_ACCESS_KEY=((s3_secret_access_key))
+      apt-get update && apt-get install -y python3-pip && pip3 install awscli
+      export PATH=$PATH:/usr/local/bin
+      pushd binary-release
+      release=$(ls | awk -F"-" '{print $1}')
+      for rel in $release; do
+        aws s3 cp ${rel}* s3://binary-releases-repo-rebels/$rel/
+      done
+      popd
