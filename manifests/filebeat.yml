@@ -1,45 +1,25 @@
 name: filebeat
 
 releases:
-- name: filebeat
-  version: ((target_version))
-
-- name: elasticsearch
-  version: 0.31.0
-  url: https://github.com/bosh-rebels/elasticsearch-boshrelease/releases/download/0.31.0/elasticsearch-boshrelease-0.31.0.tgz
-  sha1: 9217d2e1091b3d53dc48f89f8732b5745f087506  
-
+  - name: filebeat
+    version: ((target_version))
+ 
 stemcells:
-- alias:   default
-  os:      ubuntu-xenial
-  version: latest
+  - alias:   default
+    os:      ubuntu-xenial
+    version: latest
 
 instance_groups:
-- name: filebeat
-  instances: 1
-  azs:       [z1]
-  stemcell:  default
-  vm_type: default
-  networks:
-    - name: default
-  jobs:
   - name: filebeat
-    release: filebeat
-- name: elasticsearch
-  instances: 1
-  azs:       [z1]
-  stemcell:  default
-  vm_type: default
-  networks:
-    - name: default
-  jobs:
-  - name: elasticsearch
-    release: elasticsearch
-    properties:
-      elasticsearch:
-        node:
-          allow_master: true
-          allow_data: true 
+    instances: 1
+    azs:       [z1]
+    stemcell:  default
+    vm_type: default
+    networks:
+      - name: default
+    jobs:
+      - name: filebeat
+        release: filebeat
 
 update:
   canaries: 0
