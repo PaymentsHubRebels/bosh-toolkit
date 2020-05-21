@@ -31,7 +31,7 @@ run:
       export target_version=$(cat target-version/version)
       export stemcell_version=$(cat ubuntu-xenial/version)
       export release_name="${release_name}"
-
+      ubuntu-xenial/*.tgz
       pushd bosh-toolkit/manifests
       release_list=$(ruby ../tasks/export-release/release_version.rb)
 
@@ -39,5 +39,10 @@ run:
         bosh -d "$deployment" \
           export-release "${release}" "${os}/${stemcell_version}" \
           --dir=../../binary-release/
-      done
+      done  
+      popd
+
+      pushd binary-release
+        cp ../ubuntu-xenial/*.tgz .
+        tar -cvf offline_release-"${release}"-"${target_version}".tgz *.tgz
       popd
