@@ -1,0 +1,7 @@
+bosh_release_repo_name: filebeat-boshrelease
+bosh_release_branch: master
+stemcell_version_family: latest
+release_name: filebeat
+github_repository: filebeat-boshrelease
+github_owner: bosh-rebels
+app_initial_version: 0.0.5

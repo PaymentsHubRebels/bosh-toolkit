@@ -13,8 +13,6 @@ jobs:
   plan:
   - get: bosh-toolkit
     trigger: true
-  # - set_pipeline: bosh-utils-image
-  #   file: bosh-toolkit/pipelines/docker.yml
 
   - set_pipeline: zookeeper-boshrelease
     file: bosh-toolkit/pipelines/bosh_release.yml
@@ -55,3 +53,8 @@ jobs:
     file: bosh-toolkit/pipelines/bosh_release.yml
     var_files:
     - bosh-toolkit/config/kibana/pipeline_vars.yml
+
+  - set_pipeline: filebeat
+    file: bosh-toolkit/pipelines/bosh_release.yml
+    var_files:
+    - bosh-toolkit/config/filebeat/pipeline_vars.yml
