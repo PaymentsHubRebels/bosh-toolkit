@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
   - name: binary-release
+  - name: offline-release
 
 run:
   path: /bin/bash
@@ -23,6 +24,11 @@ run:
       pushd binary-release
       release=$(ls | awk -F"-" '{print $1}')
       for rel in $release; do
-        aws s3 cp ${rel}* s3://binary-releases-repo-rebels/$rel/
+          aws s3 cp ${rel}* s3://binary-releases-repo-rebels/$rel/
       done
+      popd
+
+      pushd offline-release
+      release=$(ls | awk -F"-" '{print $1}')
+      aws s3 cp ${release}-* s3://binary-releases-repo-rebels/offline-releases/${release}/
       popd

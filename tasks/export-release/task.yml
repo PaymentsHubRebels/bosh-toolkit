@@ -22,6 +22,7 @@ inputs:
   - name: bosh-toolkit
 outputs:
   - name: binary-release
+  - name: offline-release
 
 run:
   path: /bin/bash
@@ -31,8 +32,8 @@ run:
       export target_version=$(cat target-version/version)
       export stemcell_version=$(cat ubuntu-xenial/version)
       export release_name="${release_name}"
-      export offline_tarball="offline_release-${release_name}-${target_version}.tgz"
-      
+      export offline_tarball="${release_name}-offline-release-${target_version}.tgz"
+
       pushd bosh-toolkit/manifests
       release_list=$(ruby ../tasks/export-release/release_version.rb)
 
@@ -45,5 +46,5 @@ run:
 
       pushd binary-release
         cp ../ubuntu-xenial/*.tgz .
-        tar -cvf ${offline_tarball} *.tgz
+        tar -cvf ../offline-release/${offline_tarball} *.tgz 
       popd
