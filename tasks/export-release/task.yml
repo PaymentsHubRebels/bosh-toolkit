@@ -44,7 +44,10 @@ run:
       done  
       popd
 
-      pushd binary-release
-        cp ../ubuntu-xenial/*.tgz .
-        tar -cvf ../offline-release/${offline_tarball} *.tgz 
+      pushd offline-release
+        mkdir -p releases stemcell 
+        cp ../ubuntu-xenial/*.tgz stemcell/
+        cp ../binary-release/*.tgz releases/
+        tar -cvf ${offline_tarball} *
+        rm -rf releases stemcell 
       popd
