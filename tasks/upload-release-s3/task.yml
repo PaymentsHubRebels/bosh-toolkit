@@ -9,12 +9,11 @@ image_resource:
 
 inputs:
   - name: binary-release
-  - name: offline-release
 
 run:
   path: /bin/bash
   args:
-    - -exc
+    - -ec
     - |
       export AWS_DEFAULT_REGION=((s3_region))
       export AWS_ACCESS_KEY_ID=((s3_access_key_id))
@@ -26,9 +25,4 @@ run:
       for rel in $release; do
           aws s3 cp ${rel}* s3://binary-releases-repo-rebels/$rel/
       done
-      popd
-
-      pushd offline-release
-      release=$(ls | awk -F"-" '{print $1}')
-      aws s3 cp ${release}-* s3://binary-releases-repo-rebels/offline-releases/${release}/
       popd
