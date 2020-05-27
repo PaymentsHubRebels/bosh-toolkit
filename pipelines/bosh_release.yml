@@ -179,11 +179,9 @@ jobs:
         force: true
   - load_var: this_release_version
     file: target-version/version
-  - task: remove-release
+  - task: cleanup-bosh
     file: bosh-toolkit/tasks/delete-releases/task.yml
     params: 
-      release: ((release_name))
-      version: ((.:this_release_version))
       BOSH_ENVIRONMENT: ((bosh_target))
       BOSH_CA_CERT: ((bosh_ca_cert))
       BOSH_CLIENT: ((bosh_client))

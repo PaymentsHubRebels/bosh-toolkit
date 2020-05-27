@@ -8,8 +8,6 @@ image_resource:
     tag: 'latest'
 
 params:
-  release:
-  version:
   BOSH_ENVIRONMENT:
   BOSH_CA_CERT:
   BOSH_CLIENT:
@@ -20,5 +18,4 @@ run:
   args:
     - -ec
     - |
-      
-      bosh --non-interactive delete-release "${release}/${version}" --force
+      bosh --non-interactive clean-up --all
