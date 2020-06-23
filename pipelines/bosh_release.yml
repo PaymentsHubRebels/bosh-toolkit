@@ -93,9 +93,9 @@ resources:
   source:
     bucket: binary-releases-repo
     regexp: ((release_name))/((release_name))-(.*)-*.tgz
+    region_name: ((s3_region))
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
 
 jobs:
 - name: build-deploy-test
