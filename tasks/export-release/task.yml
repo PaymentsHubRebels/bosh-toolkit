@@ -17,6 +17,7 @@ params:
   BOSH_CLIENT_SECRET:
 
 inputs:
+  - name: ubuntu-xenial
   - name: target-version
 outputs:
   - name: compiled-release
@@ -26,7 +27,7 @@ run:
   args:
     - -ec
     - |
-      stemcell_version=$(bosh -d "$deployment" deployment | grep ${release_name} | awk '{print $3}' | awk -F '/' '{print $2}')
+      stemcell_version=$(cat ubuntu-xenial/version)
       bosh -d "$deployment" \
            export-release "${release_name}/$(cat target-version/version)" "${os}/${stemcell_version}" \
            --dir=compiled-release/
