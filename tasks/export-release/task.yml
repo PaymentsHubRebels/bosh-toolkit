@@ -17,7 +17,7 @@ params:
   BOSH_CLIENT_SECRET:
 
 inputs:
-  - name: version
+  - name: target-version
 outputs:
   - name: compiled-release
 
@@ -28,5 +28,5 @@ run:
     - |
       stemcell_version=$(bosh -d "$deployment" deployment | grep ${release_name} | awk '{print $3}' | awk -F '/' '{print $2}')
       bosh -d "$deployment" \
-           export-release "${release_name}/$(cat version/version)" "${os}/${stemcell_version}" \
+           export-release "${release_name}/$(cat target-version/version)" "${os}/${stemcell_version}" \
            --dir=compiled-release/
