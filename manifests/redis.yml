@@ -28,10 +28,10 @@ instance_groups:
 - name: redis
   azs: [z1,z2,z3]
   instances: 3
-  vm_type: default
+  vm_type: medium
   stemcell: default
   persistent_disk: 10240
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: redis
     release: redis
@@ -40,10 +40,10 @@ instance_groups:
 - name: redis-sentinel
   azs: [z1,z2,z3]
   instances: 3
-  vm_type: default
+  vm_type: medium
   stemcell: default
   persistent_disk: 10240
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: redis-sentinel
     release: redis
@@ -51,9 +51,10 @@ instance_groups:
   azs: [z1,z2,z3]
   instances: 1
   lifecycle: errand
-  vm_type: default
+  vm_type: medium
+
   stemcell: default
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: sanity-tests
     release: redis
