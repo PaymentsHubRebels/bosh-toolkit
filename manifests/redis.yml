@@ -52,7 +52,6 @@ instance_groups:
   instances: 1
   lifecycle: errand
   vm_type: medium
-
   stemcell: default
   networks: [{name: concourse}]
   jobs:
