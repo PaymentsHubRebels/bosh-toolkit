@@ -43,8 +43,8 @@ resources:
     driver: s3
     region_name: ((s3_region))
     initial_version: ((app_initial_version))
-    bucket: bosh-releases-semver-rebels
-    key: ((release_name))/version
+    bucket: ((s3_bucket))
+    key: running-versions/((release_name))/version
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 
@@ -54,8 +54,8 @@ resources:
     driver: s3
     region_name: ((s3_region))
     initial_version: ((app_initial_version))
-    bucket: bosh-releases-semver-rebels
-    key: ((release_name))/version
+    bucket: ((s3_bucket))
+    key: bumped-versions/((release_name))/version
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 
@@ -65,8 +65,8 @@ resources:
     driver: s3
     region_name: ((s3_region))
     initial_version: ((app_initial_version))
-    bucket: bosh-releases-semver-rebels
-    key: ((release_name))/target/version
+    bucket: ((s3_bucket))
+    key: target-versions/((release_name))/target/version
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 
@@ -76,8 +76,8 @@ resources:
     driver: s3
     region_name: ((s3_region))
     initial_version: 0.0.0
-    bucket: triggers-rebels
-    key: ((release_name))/trigger
+    bucket: ((s3_bucket))
+    key: triggers/((release_name))/trigger
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
 
@@ -91,7 +91,7 @@ resources:
 - name: compiled-releases-repo
   type: s3
   source:
-    bucket: binary-releases-repo
+    bucket: ((s3_bucket))
     regexp: ((release_name))/((release_name))-(.*)-*.tgz
     region_name: ((s3_region))
     access_key_id: ((s3_access_key_id))
