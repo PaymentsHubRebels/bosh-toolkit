@@ -19,9 +19,9 @@ instance_groups:
   instances: 1
   azs:       [z1]
   stemcell:  default
-  vm_type: default
+  vm_type: medium
   networks:
-    - name: default
+    - name: concourse
   jobs:
    - name: apm-server
      release: elasticapm
@@ -41,12 +41,10 @@ instance_groups:
     serial: true
   azs:
   - z1
-  - z2
-  - z3
-  vm_type: default
+  vm_type: medium
   persistent_disk: 1024
   networks:
-  - name: default
+  - name: concourse
 
 update:
   canaries: 0
