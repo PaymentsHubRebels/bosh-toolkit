@@ -4,4 +4,4 @@ stemcell_version_family: latest
 release_name: kibana
 github_repository: kibana-boshrelease
 github_owner: bosh-rebels
-app_initial_version : 0.16.3
+app_initial_version : 0.19.2
