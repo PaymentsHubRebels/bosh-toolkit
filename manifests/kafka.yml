@@ -28,7 +28,7 @@ addons:
 
 instance_groups:
 - name: kafka
-  azs: [z1, z2, z3]
+  azs: [z1]
   instances: 2
   vm_resources:
     cpu: 2
@@ -36,7 +36,7 @@ instance_groups:
     ephemeral_disk_size: 10240
   stemcell: default
   persistent_disk: 10240
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: kafka
     release: kafka
@@ -56,7 +56,7 @@ instance_groups:
             min:
               isr: 1
 - name: zookeeper
-  azs: [z1, z2, z3]
+  azs: [z1]
   instances: 1
   vm_resources:
     cpu: 1
@@ -64,7 +64,7 @@ instance_groups:
     ephemeral_disk_size: 10240
   stemcell: default
   persistent_disk: 10240
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: zookeeper
     release: zookeeper
@@ -73,7 +73,7 @@ instance_groups:
     properties: {}
 
 - name: sanitytest
-  azs: [z1, z2, z3]
+  azs: [z1]
   instances: 1
   lifecycle: errand
   vm_resources:
@@ -81,7 +81,7 @@ instance_groups:
     ram: 1024
     ephemeral_disk_size: 10240
   stemcell: default
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: sanitytest
     release: kafka
