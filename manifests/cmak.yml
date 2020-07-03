@@ -23,11 +23,11 @@ addons:
 
 instance_groups:
 - name: cmak
-  azs: [z1, z2, z3]
+  azs: [z1]
   instances: 1
-  vm_type: default
+  vm_type: medium
   stemcell: default
-  networks: [{name: default}]
+  networks: [{name: concourse}]
   jobs:
   - name: cmak
     release: cmak
