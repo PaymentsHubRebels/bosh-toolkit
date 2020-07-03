@@ -4,4 +4,4 @@ stemcell_version_family: latest
 release_name: filebeat
 github_repository: filebeat-boshrelease
 github_owner: bosh-rebels
-app_initial_version: 0.0.5
+app_initial_version: 0.0.7
