@@ -36,15 +36,13 @@ instance_groups:
     serial: true
   azs:
   - z1
-  - z2
-  - z3
   vm_resources:
     cpu: 2
     ram: 2048
     ephemeral_disk_size: 10240
   persistent_disk: 1024
   networks:
-  - name: default
+  - name: concourse
 
 update:
   canaries: 1
