@@ -27,10 +27,10 @@ instance_groups:
     serial: true
   azs:
   - z1
-  vm_type: medium
+  vm_type: default
   persistent_disk: 1024
   networks:
-  - name: concourse
+  - name: default
 - name: pre-upgrade
   lifecycle: errand
   jobs:
@@ -40,9 +40,9 @@ instance_groups:
   stemcell: xenial
   azs:
   - z1
-  vm_type: medium
+  vm_type: default
   networks:
-  - name: concourse
+  - name: default
 - name: post-upgrade
   lifecycle: errand
   jobs:
@@ -52,9 +52,9 @@ instance_groups:
   stemcell: xenial
   azs:
   - z1
-  vm_type: medium
+  vm_type: default
   networks:
-  - name: concourse
+  - name: default
 
 update:
   canaries: 1

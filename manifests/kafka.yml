@@ -36,7 +36,7 @@ instance_groups:
     ephemeral_disk_size: 10240
   stemcell: default
   persistent_disk: 10240
-  networks: [{name: concourse}]
+  networks: [{name: default}]
   jobs:
   - name: kafka
     release: kafka
@@ -64,7 +64,7 @@ instance_groups:
     ephemeral_disk_size: 10240
   stemcell: default
   persistent_disk: 10240
-  networks: [{name: concourse}]
+  networks: [{name: default}]
   jobs:
   - name: zookeeper
     release: zookeeper
@@ -81,7 +81,7 @@ instance_groups:
     ram: 1024
     ephemeral_disk_size: 10240
   stemcell: default
-  networks: [{name: concourse}]
+  networks: [{name: default}]
   jobs:
   - name: sanitytest
     release: kafka

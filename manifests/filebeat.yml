@@ -14,9 +14,9 @@ instance_groups:
     instances: 1
     azs:       [z1]
     stemcell:  default
-    vm_type: medium
+    vm_type: default
     networks:
-      - name: concourse
+      - name: default
     jobs:
       - name: filebeat
         release: filebeat

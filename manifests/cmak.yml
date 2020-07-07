@@ -25,9 +25,9 @@ instance_groups:
 - name: cmak
   azs: [z1]
   instances: 1
-  vm_type: medium
+  vm_type: default
   stemcell: default
-  networks: [{name: concourse}]
+  networks: [{name: default}]
   jobs:
   - name: cmak
     release: cmak
