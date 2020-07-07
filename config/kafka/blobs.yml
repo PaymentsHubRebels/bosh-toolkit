@@ -2,3 +2,5 @@
   bosh_blob_path: v3.2.0.tar.gz
 - url: "https://downloads.apache.org/kafka/2.4.0/kafka_2.12-2.4.0.tgz"
   bosh_blob_path: kafka/kafka_2.12-2.4.0.tgz
+- url: "https://github.com/bosh-rebels/kafka-utils-dependencies/releases/download/1.0.0/kafka-utils-dependencies.tar.gz"
+  bosh_blob_path: kafka-utils-dependencies.tar.gz
