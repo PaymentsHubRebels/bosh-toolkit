@@ -27,10 +27,10 @@ resources:
   type: bosh-deployment
   source: &bosh-deployment-source
     deployment: ((release_name))
-    target: ((bosh_target))
-    client: ((bosh_client))
-    client_secret: ((bosh_client_secret))
-    ca_cert: ((bosh_ca_cert))
+    target: ((/concourse/main/bosh_target))
+    client: ((/concourse/main/bosh_client))
+    client_secret: ((/concourse/main/bosh_client_secret))
+    ca_cert: ((/concourse/main/bosh_ca_cert))
 
 - name: remove-deployment
   type: bosh-deployment
@@ -41,61 +41,61 @@ resources:
   type: semver
   source:
     driver: s3
-    region_name: ((s3_region))
+    region_name: ((/concourse/main/s3_region))
     initial_version: ((app_initial_version))
-    bucket: ((s3_bucket))
+    bucket: ((/concourse/main/s3_bucket))
     key: running-versions/((release_name))/version
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
+    access_key_id: ((/concourse/main/s3_access_key_id))
+    secret_access_key: ((/concourse/main/s3_secret_access_key))
 
 - name: bumped-version
   type: semver
   source:
     driver: s3
-    region_name: ((s3_region))
+    region_name: ((/concourse/main/s3_region))
     initial_version: ((app_initial_version))
     bucket: ((s3_bucket))
     key: bumped-versions/((release_name))/version
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
+    access_key_id: ((/concourse/main/s3_access_key_id))
+    secret_access_key: ((/concourse/main/s3_secret_access_key))
 
 - name: target-version
   type: semver
   source:
     driver: s3
-    region_name: ((s3_region))
+    region_name: ((/concourse/main/s3_region))
     initial_version: ((app_initial_version))
-    bucket: ((s3_bucket))
+    bucket: ((/concourse/main/s3_bucket))
     key: target-versions/((release_name))/target/version
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
+    access_key_id: ((/concourse/main/s3_access_key_id))
+    secret_access_key: ((/concourse/main/s3_secret_access_key))
 
 - name: cleanup-trigger
   type: semver
   source:
     driver: s3
-    region_name: ((s3_region))
+    region_name: ((/concourse/main/s3_region))
     initial_version: 0.0.0
-    bucket: ((s3_bucket))
+    bucket: ((/concourse/main/s3_bucket))
     key: triggers/((release_name))/trigger
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
+    access_key_id: ((/concourse/main/s3_access_key_id))
+    secret_access_key: ((/concourse/main/s3_secret_access_key))
 
 - name: github-release
   type: github-release
   source:
-    owner: ((github_owner))
+    owner: ((/concourse/main/github_owner))
     repository: ((github_repository))
-    access_token: ((github_token))
+    access_token: ((/concourse/main/github_token))
 
 - name: compiled-releases-repo
   type: s3
   source:
-    bucket: ((s3_bucket))
+    bucket: ((/concourse/main/s3_bucket))
     regexp: ((release_name))/((release_name))-(.*)-*.tgz
-    region_name: ((s3_region))
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
+    region_name: ((/concourse/main/s3_region))
+    access_key_id: ((/concourse/main/s3_access_key_id))
+    secret_access_key: ((/concourse/main/s3_secret_access_key))
 
 jobs:
 - name: build-deploy-test
@@ -141,24 +141,24 @@ jobs:
         file: bosh-toolkit/tasks/run-errands/task.yml
         params:
           deployment: ((release_name))
-          BOSH_ENVIRONMENT: ((bosh_target))
-          BOSH_CA_CERT: ((bosh_ca_cert))
-          BOSH_CLIENT: ((bosh_client))
-          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_ENVIRONMENT: ((/concourse/main/bosh_target))
+          BOSH_CA_CERT: ((/concourse/main/bosh_ca_cert))
+          BOSH_CLIENT: ((/concourse/main/bosh_client))
+          BOSH_CLIENT_SECRET: ((/concourse/main/bosh_client_secret))
       - task: export-release
         file: bosh-toolkit/tasks/export-release/task.yml
         params:
           release_name: ((release_name))
           deployment: ((release_name))
-          BOSH_ENVIRONMENT: ((bosh_target))
-          BOSH_CA_CERT: ((bosh_ca_cert))
-          BOSH_CLIENT: ((bosh_client))
-          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_ENVIRONMENT: ((/concourse/main/bosh_target))
+          BOSH_CA_CERT: ((/concourse/main/bosh_ca_cert))
+          BOSH_CLIENT: ((/concourse/main/bosh_client))
+          BOSH_CLIENT_SECRET: ((/concourse/main/bosh_client_secret))
       - task: prepare-release-notes
         file: bosh-toolkit/tasks/create-release-notes/task.yml
         params:
           release_name: ((release_name))
-          github_owner: ((github_owner))
+          github_owner: ((/concourse/main/github_owner))
           github_repository: ((github_repository))
       - put: compiled-releases-repo
         params:
@@ -192,7 +192,7 @@ jobs:
   - task: cleanup-bosh
     file: bosh-toolkit/tasks/delete-releases/task.yml
     params: 
-      BOSH_ENVIRONMENT: ((bosh_target))
-      BOSH_CA_CERT: ((bosh_ca_cert))
-      BOSH_CLIENT: ((bosh_client))
-      BOSH_CLIENT_SECRET: ((bosh_client_secret))
+      BOSH_ENVIRONMENT: ((/concourse/main/bosh_target))
+      BOSH_CA_CERT: ((/concourse/main/bosh_ca_cert))
+      BOSH_CLIENT: ((/concourse/main/bosh_client))
+      BOSH_CLIENT_SECRET: ((/concourse/main/bosh_client_secret))
