@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: paymentshubrebels/bosh-utils
+    repository: your-repo/bosh-utils
     tag: 'latest'
 
 params:
@@ -29,7 +29,7 @@ run:
     popd
     echo "Cleaning up cache unused blobs finished."
 
-    echo "Downloading blobs for $release_name..." 
+    echo "Downloading blobs for $release_name..."
     pushd blobs
       ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$release_name/blobs.yml
     popd
@@ -39,13 +39,13 @@ run:
     config_file="bosh-toolkit/config/$release_name/vendor_packages.yml"
     if [[ -f "$config_file" ]]; then
       for package in $(yq r "$config_file" '[*].name'); do
-        echo "Downloading blobs for $package..." 
+        echo "Downloading blobs for $package..."
         local_blobstore=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").local_blobstore')
         pushd blobs
-          if [[ "$local_blobstore" == "true" ]]; then 
+          if [[ "$local_blobstore" == "true" ]]; then
             ruby ../bosh-toolkit/tasks/download-blobs/download_blobs.rb ../bosh-toolkit/config/$package/blobs.yml
           fi
         popd
-        echo "Downloading blobs for $package finished."  
+        echo "Downloading blobs for $package finished."
       done
     fi

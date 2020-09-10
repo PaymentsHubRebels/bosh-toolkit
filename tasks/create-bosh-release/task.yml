@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: paymentshubrebels/bosh-utils
+    repository: your-repo/bosh-utils
     tag: 'latest'
 
 params:
@@ -57,13 +57,13 @@ run:
           bosh add-blob --dir="${release_dir}" "$blob" "$blob"
         done
       popd
-    
+
     }
 
     function create_vendor_release {
         local package="$1"
         local config_file="$2"
-        
+
         local git_url
         local package_name
         local ref
@@ -79,7 +79,7 @@ run:
         pushd "$package_name"
           git checkout "$ref"
           if [[ "$local_blobstore" == "true" ]]; then
-            configure_local_blobstore  
+            configure_local_blobstore
             add_blobs $(pwd)
           fi
 
@@ -90,11 +90,11 @@ run:
     function vendor_release {
       local package="$1"
       local config_file="$2"
-      
+
       local package_name
-      
+
       package_name=$(yq r "$config_file" -j | jq -r '.[] | select(.name== "'$package'").package')
-      
+
       rm -rf "${workdir}/app-source-code/packages/${package_name}"
       bosh vendor-package --dir="${workdir}/app-source-code" "$package_name" "${workdir}/${package_name}"
     }
@@ -106,7 +106,7 @@ run:
     fi
 
     pushd app-source-code
-      configure_local_blobstore  
+      configure_local_blobstore
       add_blobs "$(pwd)"
     popd
     vendor_packages_config_file="${workdir}/bosh-toolkit/config/${release_name}/vendor_packages.yml"
@@ -117,7 +117,7 @@ run:
         vendor_release "$package" "$vendor_packages_config_file"
       done
     fi
-    
+
     tar_name="${github_repository}-$(cat target-version/version)"
     pushd app-source-code
       bosh create-release "${bosh_options[@]}" --tarball=../release/${tar_name}.tgz
