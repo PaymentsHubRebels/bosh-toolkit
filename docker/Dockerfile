@@ -26,3 +26,4 @@ RUN true \
   && wget -qO /bin/jq ${jq_cli_url} \
   && echo "${jq_cli_sha1}  /bin/jq" | sha1sum -c \
   && chmod +x /bin/jq
+
